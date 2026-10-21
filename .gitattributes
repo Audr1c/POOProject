@@ -1,0 +1,19 @@
+# Par défaut : Git détecte si c'est du texte et le stocke en LF dans le dépôt
+* text=auto eol=lf
+
+# Code et config : toujours texte, LF
+*.cpp  text eol=lf
+*.hpp  text eol=lf
+*.h    text eol=lf
+*.txt  text eol=lf
+*.md   text eol=lf
+*.cmake text eol=lf
+*.sh   text eol=lf
+
+# Binaires : jamais modifiés par Git, pas de diff texte
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.ttf  binary
+*.a    binary
+*.exe  binary

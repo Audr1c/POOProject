@@ -11,9 +11,8 @@ cd POOProject
 
 Building
 ```sh
-mkdir build 
-cd build 
-cmake ..
+cmake -S . -B build
+cd build
 make poop # ninja poop
 ./poop
 ```
