@@ -26,6 +26,7 @@ FetchContent_MakeAvailable(SFML)
 # Nos programmes
 add_executable(poop ./app/main.cpp)
 add_executable(sfml ./app/sfml_test.cpp)
+add_executable(world_test ./app/world_test.cpp)
 
 # Options strictes du sujet, appliquees a NOTRE code seulement (pas a SFML)
 target_compile_options(poop PRIVATE -Wall -Wextra -Werror)
