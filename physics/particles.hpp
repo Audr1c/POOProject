@@ -39,6 +39,10 @@ public:
     previous_pos = pos;
   }
 
+  Particle(const Vec2 &init_pos, float mass, Force &gravity, Force &drag,
+           bool moovable = true)
+      : Particle(init_pos.x, init_pos.y, mass, gravity, drag, moovable) {}
+
   /*
    * update the acceleration based on all the force acting on the particle
    */

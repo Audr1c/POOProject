@@ -87,6 +87,10 @@ public:
         p.pos.y = world_borders.y_max;
         p.speed.y = 0;
       }
+      // Verlet keeps its own history: keep it consistent after a clamp
+      if (p.pos.y == world_borders.y_min || p.pos.x == world_borders.x_min ||
+          p.pos.x == world_borders.x_max || p.pos.y == world_borders.y_max)
+        p.previous_pos = p.pos;
     }
   }
 

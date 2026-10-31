@@ -4,6 +4,7 @@
 #include "../physics/renderer.hpp"
 #include "../physics/vec2.hpp"
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -11,6 +12,7 @@ class SFMLRender : public Renderer {
 private:
   float scale = 1.0f;      // Pixels per meter (SI -> pixels)
   Vec2 offset{0.0f, 0.0f}; // Origin offset in pixels
+  Vec2 world_size{0.0f, 0.0f}; // Visible world area in meters (0 = no auto-fit)
   bool flip_y = true;      // If true, +y in physics points upwards on screen
   Color bg_color{30, 30, 40, 255};
   Color default_circle_color{255, 140, 0, 255};
@@ -39,8 +41,10 @@ public:
                      const std::string &name = "Moteur Masses-Ressorts",
                      unsigned int fps_limit = 60) {
     if (!win.isOpen()) {
-      win.create(sf::VideoMode(width, height), name);
+      // Style::Default = titlebar + close + resizable
+      win.create(sf::VideoMode(width, height), name, sf::Style::Default);
       win.setFramerateLimit(fps_limit);
+      refit();
     } else {
       std::cout << "Window already exists" << std::endl;
     }
@@ -66,6 +70,24 @@ public:
   void setOffset(const Vec2 &pixel_offset) { offset = pixel_offset; }
   void setOffset(float ox, float oy) { offset = Vec2(ox, oy); }
   Vec2 getOffset() const { return offset; }
+
+  // Declare the visible world area (in meters, origin bottom-left). The scale
+  // and offset are recomputed so it always fits the window, even when resized.
+  void fitWorld(const Vec2 &size_m) {
+    world_size = size_m;
+    refit();
+  }
+
+  void refit() {
+    if (world_size.x <= 0.f || world_size.y <= 0.f)
+      return;
+    Vec2 win_px(static_cast<float>(win.getSize().x),
+                static_cast<float>(win.getSize().y));
+    scale = std::min(win_px.x / world_size.x, win_px.y / world_size.y);
+    Vec2 used = world_size * scale;
+    Vec2 margin = (win_px - used) / 2.f; // letterbox: center the world
+    offset = Vec2(margin.x, flip_y ? margin.y + used.y : margin.y);
+  }
 
   void setFlipY(bool flip) { flip_y = flip; }
   bool getFlipY() const { return flip_y; }
@@ -130,6 +152,16 @@ public:
 
   // --- Scene Helpers ---
 
+  // Draw the outline of the world area [0,w]x[0,h] (needs fitWorld)
+  void drawWorldFrame(const Color &color = Color(120, 120, 140)) {
+    Vec2 a(0.f, 0.f), b(world_size.x, 0.f), c(world_size.x, world_size.y),
+        d(0.f, world_size.y);
+    drawLine(a, b, color);
+    drawLine(b, c, color);
+    drawLine(c, d, color);
+    drawLine(d, a, color);
+  }
+
   // Draw a horizontal ground line at world coordinate y = ground_y
   void drawGround(float ground_y, const Color &color = Color(120, 120, 140)) {
     float screen_y = worldToScreen(Vec2(0.f, ground_y)).y;
@@ -151,6 +183,12 @@ public:
     while (win.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         win.close();
+      } else if (event.type == sf::Event::Resized) {
+        // Keep 1 unit = 1 pixel (no stretching), then refit the world
+        win.setView(sf::View(sf::FloatRect(0.f, 0.f,
+                                           static_cast<float>(event.size.width),
+                                           static_cast<float>(event.size.height))));
+        refit();
       } else if (event.type == sf::Event::KeyPressed &&
                  event.key.code == sf::Keyboard::Escape) {
         win.close();
