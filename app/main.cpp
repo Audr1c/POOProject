@@ -7,8 +7,6 @@
 #include <iostream>
 using namespace std;
 
-int Entity::current_ids = 0;
-
 // Placeholder force that does nothing (used while real drag is not written)
 class NoForce : public Force {
 public:

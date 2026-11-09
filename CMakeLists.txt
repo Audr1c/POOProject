@@ -23,6 +23,24 @@ FetchContent_Declare(SFML
     SYSTEM)                                      # pas d'avertissements venant des en-tetes SFML
 FetchContent_MakeAvailable(SFML)
 
+# Moteur physique (sans dependance a SFML)
+add_library(physics STATIC
+    ./physics/color.cpp
+    ./physics/entity.cpp
+    ./physics/drawable.cpp
+    ./physics/renderer.cpp
+    ./physics/vec2.cpp
+    ./physics/particles.cpp
+    ./physics/world.cpp
+    ./physics/forces/force.cpp
+    ./physics/integrators/integrators.cpp)
+target_compile_options(physics PRIVATE -Wall -Wextra -Werror)
+
+# Rendu SFML
+add_library(render STATIC ./render/sfmlrenderer.cpp)
+target_compile_options(render PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(render PUBLIC physics sfml-graphics)
+
 # Nos programmes
 add_executable(poop ./app/main.cpp)
 add_executable(sfml ./app/sfml_test.cpp)
@@ -30,7 +48,7 @@ add_executable(world_test ./app/world_test.cpp)
 
 # Options strictes du sujet, appliquees a NOTRE code seulement (pas a SFML)
 target_compile_options(poop PRIVATE -Wall -Wextra -Werror)
-target_link_libraries(poop PRIVATE sfml-graphics)
+target_link_libraries(poop PRIVATE physics render sfml-graphics)
 
 target_compile_options(sfml PRIVATE -Wall -Wextra -Werror)
 target_link_libraries(sfml PRIVATE sfml-graphics)

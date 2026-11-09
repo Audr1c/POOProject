@@ -8,15 +8,13 @@ private:
   std::string name;
 
 public:
-  Entity(const std::string &name) : id(current_ids), name(name) {
-    current_ids++;
-  }
+  Entity(const std::string &name);
   // should not be used
-  Entity(int custom_id, const std::string &name) : id(custom_id), name(name) {}
+  Entity(int custom_id, const std::string &name);
   virtual ~Entity() = default;
 
-  int getId() const { return id; }
-  const std::string &getName() const { return name; }
+  int getId() const;
+  const std::string &getName() const;
 };
 
 /// pour avoir de nouvlell class "clase Update : virtual Entity {};"
