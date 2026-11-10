@@ -26,20 +26,27 @@ private:
   Vec2 speed;
   Vec2 accel;
   float mass;
+  float bounciness; //make rebounds on the edge of the world
   bool moovable;
   std::vector<std::reference_wrapper<Force>> acting_forces;
 
 public:
-  Particle(float x_init, float y_init, float mass, Force &gravity, Force &drag,
+
+  const float radius;
+
+  Particle(float x_init, float y_init, float mass, float bounciness, Force &gravity, Force &drag,
            bool moovable = true);
 
-  Particle(const Vec2 &init_pos, float mass, Force &gravity, Force &drag,
+  Particle(const Vec2 &init_pos, float mass, float bounciness, Force &gravity, Force &drag,
            bool moovable = true);
 
   /*
    * update the acceleration based on all the force acting on the particle
    */
   void apply_force();
+
+
+  
 
   friend std::ostream &operator<<(std::ostream &os, const Particle &p);
 

@@ -51,28 +51,28 @@ void World::updatePos(float dt) {
   }
 
   // check that every particle is inside the world borders, and if that's not
-  // the case move them inside
+  // the case move them inside and make them rebound
   for (Particle &p : particles) {
-    if (p.pos.x < world_borders.x_min) {
-      p.pos.x = world_borders.x_min;
-      p.speed.x = 0;
+    if (p.pos.x - p.radius < world_borders.x_min) {
+      p.pos.x = world_borders.x_min + p.radius;
+      p.speed.x = -p.speed.x * p.bounciness;
     }
-    if (p.pos.x > world_borders.x_max) {
-      p.pos.x = world_borders.x_max;
-      p.speed.x = 0;
+    if (p.pos.x + p.radius > world_borders.x_max) {
+      p.pos.x = world_borders.x_max - p.radius;
+      p.speed.x = -p.speed.x * p.bounciness;
     }
-    if (p.pos.y < world_borders.y_min) {
-      p.pos.y = world_borders.y_min;
-      p.speed.y = 0;
+    if (p.pos.y - p.radius < world_borders.y_min) {
+      p.pos.y = world_borders.y_min + p.radius;
+      p.speed.y = -p.speed.y * p.bounciness;
     }
-    if (p.pos.y > world_borders.y_max) {
-      p.pos.y = world_borders.y_max;
-      p.speed.y = 0;
+    if (p.pos.y +  p.radius > world_borders.y_max) {
+      p.pos.y = world_borders.y_max - p.radius;
+      p.speed.y = -p.speed.y * p.bounciness;
     }
     // Verlet keeps its own history: keep it consistent after a clamp
-    if (p.pos.y == world_borders.y_min || p.pos.x == world_borders.x_min ||
-        p.pos.x == world_borders.x_max || p.pos.y == world_borders.y_max)
-      p.previous_pos = p.pos;
+    if (p.pos.y <= world_borders.y_min + p.radius || p.pos.x <= world_borders.x_min + p.radius ||
+        p.pos.x >= world_borders.x_max - p.radius || p.pos.y >= world_borders.y_max - p.radius )
+        p.previous_pos = p.pos - p.speed*dt;
   }
 }
 
