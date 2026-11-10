@@ -13,8 +13,8 @@ public:
   virtual Vec2 compute(const Particle &p) = 0;
 };
 
-class TempForce : public Force {
+class Gravity : public Force {
 public:
-  TempForce();
+  Gravity();
   Vec2 compute(const Particle &) override;
 };

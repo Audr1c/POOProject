@@ -31,18 +31,19 @@ int main() {
   w.setBorders({0.f, world_size.x, 0.f, world_size.y});
 
   // 3. Forces and integrator
-  TempForce gravity; // (0, -9.81)
+  Gravity gravity; // (0, -9.81)
   NoForce drag;
   w.setIntegrator(makeIntegrator(IntegratorType::Euler));
 
   // 4. Scene: a row of particles of growing size dropped from different
-  //    heights, plus a fixed anchor at the top (the particle radius is its mass)
+  //    heights, plus a fixed anchor at the top (the particle radius is its
+  //    mass)
   const Vec2 first(2.f, 8.f);
   const Vec2 step(1.5f, -0.6f);
   for (int i = 0; i < 8; i++) {
     float mass = 0.15f + 0.05f * static_cast<float>(i);
-    w.addPart(Particle(first + step * static_cast<float>(i), mass, gravity,
-                       drag));
+    w.addPart(
+        Particle(first + step * static_cast<float>(i), mass, gravity, drag));
   }
   w.addPart(Particle(world_size.x / 2.f, world_size.y - 0.5f, 0.3f, gravity,
                      drag, false));
