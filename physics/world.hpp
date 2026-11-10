@@ -36,7 +36,7 @@ public:
   void addPart(const Particle &new_part);
 
 
-  void addSpring(Particle &a, Particle &b, float L0, float k, float rho);
+  //void addSpring(Particle &a, Particle &b, float L0, float k, float rho);
 
 
 
