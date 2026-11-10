@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <memory>
 #include <ostream>
 #include <vector>
@@ -21,7 +22,7 @@ class World {
 private:
   std::vector<Particle>
       particles; // Vector containing all the particles of the world
-  std::vector<Spring> springs;
+  std::vector<std::unique_ptr<Spring>> springs; // unique_ptr: a Spring must never move (particles keep a reference to it)
   std::unique_ptr<Integrator>
       integrator;        // Integrator algorithm which is used in the world
   Borders world_borders; // Saved as {x_min, x_max, y_min, y_max}
@@ -63,4 +64,14 @@ public:
    * Draw the new picture on the screen by calling all drawable objects
    */
   void draw(Renderer &renderer);
+
+  // getter a particule
+  Particle &getParticle(int id) {
+    for (Particle &p : particles) {
+      if (p.getId() == id)
+        return p;
+    }
+    throw std::out_of_range("Particle id " + std::to_string(id) +
+                            " introuvable"); // thx Claude
+  };
 };

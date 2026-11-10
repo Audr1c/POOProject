@@ -1,18 +1,24 @@
 #include "particles.hpp"
+#include "drawable.hpp"
+#include "entity.hpp"
 #include <string>
 
-Particle::Particle(float x_init, float y_init, float mass, float bounciness, Force &gravity,
-                   Force &drag, bool moovable)
+Particle::Particle() : Entity("Particule error"), Drawable(), radius(0) {};
+
+Particle::Particle(float x_init, float y_init, float mass, float bounciness,
+                   Force &gravity, Force &drag, bool moovable)
     : Entity("Particle, starting at : " + std::to_string(x_init) + "," +
              std::to_string(y_init)),
-      Drawable(), pos(x_init, y_init), accel(0, 0), mass(mass), bounciness(bounciness),
-      moovable(moovable), acting_forces({gravity, drag}) , radius(mass) {
+      Drawable(), pos(x_init, y_init), accel(0, 0), mass(mass),
+      bounciness(bounciness), moovable(moovable),
+      acting_forces({gravity, drag}), radius(mass) {
   previous_pos = pos;
 }
 
-Particle::Particle(const Vec2 &init_pos, float mass, float bounciness, Force &gravity,
-                   Force &drag, bool moovable)
-    : Particle(init_pos.x, init_pos.y, mass, bounciness, gravity, drag, moovable) {}
+Particle::Particle(const Vec2 &init_pos, float mass, float bounciness,
+                   Force &gravity, Force &drag, bool moovable)
+    : Particle(init_pos.x, init_pos.y, mass, bounciness, gravity, drag,
+               moovable) {}
 
 /*
  * update the acceleration based on all the force acting on the particle

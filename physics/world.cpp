@@ -17,7 +17,7 @@ std::unique_ptr<Integrator> makeIntegrator(IntegratorType type) {
 void World::addPart(const Particle &new_part) { particles.push_back(new_part); }
 
 void World::addSpring(Particle &a, Particle &b, float L0, float k, float rho) {
-  return springs.push_back(Spring(a, b, L0, k, rho));
+  springs.push_back(std::make_unique<Spring>(a, b, L0, k, rho));
 }
 
 /*
@@ -92,8 +92,8 @@ std::ostream &operator<<(std::ostream &os, const World &w) {
 void World::draw(Renderer &renderer) {
 
   // Draw springs
-  for (Spring &s : springs) {
-    s.draw(renderer);
+  for (auto &s : springs) {
+    s->draw(renderer);
   }
 
   // Draw particles
