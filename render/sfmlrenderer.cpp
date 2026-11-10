@@ -157,24 +157,37 @@ void SFMLRender::drawGround(float ground_y, const Color &color) {
 
 bool SFMLRender::pollEvent(sf::Event &event) { return win.pollEvent(event); }
 
+// Handle the window events every program needs: close button, Escape and
+// resize. Returns true if the event was consumed.
+bool SFMLRender::handleWindowEvent(const sf::Event &event) {
+  if (event.type == sf::Event::Closed) {
+    win.close();
+    return true;
+  }
+  if (event.type == sf::Event::Resized) {
+    // Keep 1 unit = 1 pixel (no stretching), then refit the world
+    win.setView(sf::View(sf::FloatRect(0.f, 0.f,
+                                       static_cast<float>(event.size.width),
+                                       static_cast<float>(event.size.height))));
+    refit();
+    return true;
+  }
+  if (event.type == sf::Event::KeyPressed &&
+      event.key.code == sf::Keyboard::Escape) {
+    win.close();
+    return true;
+  }
+  return false;
+}
+
 // Basic event handler that closes the window on Closed event or Escape key
 void SFMLRender::handleBasicEvents() {
   sf::Event event;
-  while (win.pollEvent(event)) {
-    if (event.type == sf::Event::Closed) {
-      win.close();
-    } else if (event.type == sf::Event::Resized) {
-      // Keep 1 unit = 1 pixel (no stretching), then refit the world
-      win.setView(sf::View(sf::FloatRect(0.f, 0.f,
-                                         static_cast<float>(event.size.width),
-                                         static_cast<float>(event.size.height))));
-      refit();
-    } else if (event.type == sf::Event::KeyPressed &&
-               event.key.code == sf::Keyboard::Escape) {
-      win.close();
-    }
-  }
+  while (win.pollEvent(event))
+    handleWindowEvent(event);
 }
+
+void SFMLRender::setTitle(const std::string &title) { win.setTitle(title); }
 
 sf::Vector2i SFMLRender::getMouseScreenPos() const {
   return sf::Mouse::getPosition(win);

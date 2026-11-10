@@ -1,15 +1,18 @@
 #include "integrators.hpp"
 
-void Euler::step(std::vector<Particle> &parts, float dt) {
+void Euler::step(ParticleList &parts, float dt) {
   for (Particle &p : parts) {
     if (!p.moovable)
       continue;
+    // Keep the previous position up to date too, so that the integrator can
+    // be switched to Verlet at any time without a jump
+    p.previous_pos = p.pos;
     p.speed += p.accel * dt; // Speed += acceleration * dt
     p.pos += p.speed * dt;   // Position += speed * dt
   }
 }
 
-void Verlet::step(std::vector<Particle> &parts, float dt) {
+void Verlet::step(ParticleList &parts, float dt) {
   for (Particle &p : parts) {
     if (!p.moovable)
       continue;

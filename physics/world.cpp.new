@@ -1,0 +1,39 @@
+
+  // Mirror bounce on a wall: the part of the move that went through the wall
+  // is sent back on the other side (scaled by the bounciness) and the speed
+  // is reversed. Simply clamping the particle onto the wall would add or remove
+  // energy depending on where the time step falls relative to the impact.
+  auto bounce = [](float &x, float &v, float wall, float bounciness) {
+    x = wall + bounciness * (wall - x);
+    v = -v * bounciness;
+  };
+
+  // check that every particle is inside the world borders, and if that's not
+  // the case move them inside and make them rebound
+  for (Particle &p : particles) {
+    const float x_min = world_borders.x_min + p.radius;
+    const float x_max = world_borders.x_max - p.radius;
+    const float y_min = world_borders.y_min + p.radius;
+    const float y_max = world_borders.y_max - p.radius;
+    bool bounced = false;
+
+    if (p.pos.x < x_min) {
+      bounce(p.pos.x, p.speed.x, x_min, p.bounciness);
+      bounced = true;
+    } else if (p.pos.x > x_max) {
+      bounce(p.pos.x, p.speed.x, x_max, p.bounciness);
+      bounced = true;
+    }
+    if (p.pos.y < y_min) {
+      bounce(p.pos.y, p.speed.y, y_min, p.bounciness);
+      bounced = true;
+    } else if (p.pos.y > y_max) {
+      bounce(p.pos.y, p.speed.y, y_max, p.bounciness);
+      bounced = true;
+    }
+
+    // Verlet keeps its own history: rebuild it from the new speed. With
+    // bounciness = 1 this is exactly the mirror image of the old position.
+    if (bounced)
+      p.previous_pos = p.pos - p.speed * dt;
+  }

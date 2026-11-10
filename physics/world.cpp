@@ -1,5 +1,6 @@
 #include "world.hpp"
 #include "forces/springs.hpp"
+#include <algorithm>
 
 std::unique_ptr<Integrator> makeIntegrator(IntegratorType type) {
   switch (type) {
@@ -11,13 +12,32 @@ std::unique_ptr<Integrator> makeIntegrator(IntegratorType type) {
   return nullptr;
 }
 
-/*
- * Add one particle to the particles vector
- */
-void World::addPart(const Particle &new_part) { particles.push_back(new_part); }
+const char *toString(IntegratorType type) {
+  switch (type) {
+  case IntegratorType::Euler:
+    return "Euler";
+  case IntegratorType::Verlet:
+    return "Verlet";
+  }
+  return "?";
+}
 
-void World::addSpring(Particle &a, Particle &b, float L0, float k, float rho) {
+/*
+ * Add one particle to the particles container
+ */
+Particle &World::addPart(const Particle &new_part) {
+  particles.push_back(new_part);
+  return particles.back();
+}
+
+Spring &World::addSpring(Particle &a, Particle &b, float L0, float k,
+                         float rho) {
   springs.push_back(std::make_unique<Spring>(a, b, L0, k, rho));
+  return *springs.back();
+}
+
+Spring &World::addSpring(Particle &a, Particle &b, float k, float rho) {
+  return addSpring(a, b, (b.getPos() - a.getPos()).norm(), k, rho);
 }
 
 /*
@@ -31,6 +51,7 @@ void World::setIntegrator(std::unique_ptr<Integrator> new_integrator) {
  * Define the borders of the world
  */
 void World::setBorders(Borders b) { world_borders = b; }
+const Borders &World::getBorders() const { return world_borders; }
 
 /*
  * Update all the forces on each particle
@@ -65,14 +86,16 @@ void World::updatePos(float dt) {
       p.pos.y = world_borders.y_min + p.radius;
       p.speed.y = -p.speed.y * p.bounciness;
     }
-    if (p.pos.y +  p.radius > world_borders.y_max) {
+    if (p.pos.y + p.radius > world_borders.y_max) {
       p.pos.y = world_borders.y_max - p.radius;
       p.speed.y = -p.speed.y * p.bounciness;
     }
     // Verlet keeps its own history: keep it consistent after a clamp
-    if (p.pos.y <= world_borders.y_min + p.radius || p.pos.x <= world_borders.x_min + p.radius ||
-        p.pos.x >= world_borders.x_max - p.radius || p.pos.y >= world_borders.y_max - p.radius )
-        p.previous_pos = p.pos - p.speed*dt;
+    if (p.pos.y <= world_borders.y_min + p.radius ||
+        p.pos.x <= world_borders.x_min + p.radius ||
+        p.pos.x >= world_borders.x_max - p.radius ||
+        p.pos.y >= world_borders.y_max - p.radius)
+      p.previous_pos = p.pos - p.speed * dt;
   }
 }
 
@@ -100,4 +123,46 @@ void World::draw(Renderer &renderer) {
   for (Particle &p : particles) {
     p.draw(renderer);
   }
+}
+
+std::vector<Entity *> World::entities() {
+  std::vector<Entity *> all;
+  all.reserve(particles.size() + springs.size());
+  for (Particle &p : particles)
+    all.push_back(&p); // upcast to the single shared Entity sub-object
+  for (auto &s : springs)
+    all.push_back(s.get());
+  return all;
+}
+
+Particle *World::pickParticle(const Vec2 &at, float max_dist) {
+  Particle *best = nullptr;
+  float best_dist = max_dist;
+
+  // Lambda: keep the particle closest to the click. dynamic_cast filters the
+  // Entity* that really are particles (springs are skipped).
+  auto closer = [&](Entity *e) {
+    if (Particle *p = dynamic_cast<Particle *>(e)) {
+      const float d = (p->getPos() - at).norm() - p->radius;
+      if (d < best_dist) {
+        best_dist = d;
+        best = p;
+      }
+    }
+  };
+
+  std::vector<Entity *> all = entities();
+  std::for_each(all.begin(), all.end(), closer);
+  return best;
+}
+
+std::size_t World::particleCount() const { return particles.size(); }
+std::size_t World::springCount() const { return springs.size(); }
+
+Particle &World::getParticle(int id) {
+  for (Particle &p : particles) {
+    if (p.getId() == id)
+      return p;
+  }
+  throw std::out_of_range("Particle id " + std::to_string(id) + " introuvable");
 }

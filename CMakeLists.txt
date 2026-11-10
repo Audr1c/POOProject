@@ -34,8 +34,15 @@ add_library(physics STATIC
     ./physics/world.cpp
     ./physics/forces/force.cpp
     ./physics/forces/springs.cpp
+    ./physics/forces/drag.cpp
+    ./physics/forces/wind.cpp
     ./physics/integrators/integrators.cpp)
 target_compile_options(physics PRIVATE -Wall -Wextra -Werror)
+
+# Scenes (n'utilisent que le moteur, pas SFML)
+add_library(scenes STATIC ./scenes/scenes.cpp)
+target_compile_options(scenes PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(scenes PUBLIC physics)
 
 # Rendu SFML
 add_library(render STATIC ./render/sfmlrenderer.cpp)
@@ -45,11 +52,15 @@ target_link_libraries(render PUBLIC physics sfml-graphics)
 # Nos programmes
 add_executable(poop ./app/main.cpp)
 add_executable(sfml ./app/sfml_test.cpp)
-add_executable(world_test ./app/world_test.cpp)
+add_executable(scenes_test ./tests/scenes_test.cpp)
 
 # Options strictes du sujet, appliquees a NOTRE code seulement (pas a SFML)
 target_compile_options(poop PRIVATE -Wall -Wextra -Werror)
-target_link_libraries(poop PRIVATE physics render sfml-graphics)
+target_link_libraries(poop PRIVATE scenes physics render sfml-graphics)
+
+# Test sans affichage : chaque scene, 10 s, avec les deux integrateurs
+target_compile_options(scenes_test PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(scenes_test PRIVATE scenes physics)
 
 target_compile_options(sfml PRIVATE -Wall -Wextra -Werror)
 target_link_libraries(sfml PRIVATE sfml-graphics)

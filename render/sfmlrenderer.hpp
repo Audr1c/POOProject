@@ -98,8 +98,13 @@ public:
 
   bool pollEvent(sf::Event &event);
 
+  // Close / Escape / resize. Returns true if the event was consumed.
+  bool handleWindowEvent(const sf::Event &event);
+
   // Basic event handler that closes the window on Closed event or Escape key
   void handleBasicEvents();
+
+  void setTitle(const std::string &title);
 
   sf::Vector2i getMouseScreenPos() const;
 
