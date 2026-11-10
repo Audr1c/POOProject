@@ -33,6 +33,7 @@ add_library(physics STATIC
     ./physics/particles.cpp
     ./physics/world.cpp
     ./physics/forces/force.cpp
+    ./physics/forces/springs.cpp
     ./physics/integrators/integrators.cpp)
 target_compile_options(physics PRIVATE -Wall -Wextra -Werror)
 

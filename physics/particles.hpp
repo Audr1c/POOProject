@@ -15,6 +15,7 @@ class Euler;
 class Verlet;
 class World;
 class Force;
+class Spring;
 class TempForce;
 
 class Particle : public virtual Entity, Drawable {
@@ -48,5 +49,6 @@ public:
   friend Verlet;
   friend World;
   friend Force;
+  friend Spring;
   friend TempForce;
 };

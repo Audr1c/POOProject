@@ -15,6 +15,15 @@ std::unique_ptr<Integrator> makeIntegrator(IntegratorType type) {
  */
 void World::addPart(const Particle &new_part) { particles.push_back(new_part); }
 
+
+/*void World::addSpring(Particle &a, Particle &b, float L0, float k,
+                         float rho) {
+  return springs.push_back(std::make_unique<Spring>(a, b, L0, k, rho));
+  
+}*/
+
+
+
 /*
  * Define which integrator the world uses
  */

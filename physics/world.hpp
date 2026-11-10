@@ -7,6 +7,9 @@
 #include "forces/force.hpp" //JUST TO DEBUG : NEED TO BE CHANGED
 #include "integrators/integrators.hpp"
 #include "particles.hpp"
+#include "forces/springs.hpp"
+
+
 
 enum class IntegratorType { Euler, Verlet };
 std::unique_ptr<Integrator> makeIntegrator(IntegratorType type);
@@ -20,6 +23,8 @@ class World {
 private:
   std::vector<Particle>
       particles; // Vector containing all the particles of the world
+  std::vector<std::unique_ptr<Spring>>
+      springs;  
   std::unique_ptr<Integrator>
       integrator;        // Integrator algorithm which is used in the world
   Borders world_borders; // Saved as {x_min, x_max, y_min, y_max}
@@ -29,6 +34,11 @@ public:
    * Add one particle to the particles vector
    */
   void addPart(const Particle &new_part);
+
+
+  void addSpring(Particle &a, Particle &b, float L0, float k, float rho);
+
+
 
   /*
    * Define which integrator the world uses
