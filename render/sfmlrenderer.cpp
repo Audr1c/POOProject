@@ -1,5 +1,6 @@
 #include "sfmlrenderer.hpp"
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 
 sf::Color SFMLRender::toSfColor(const Color &c) {
@@ -17,8 +18,11 @@ void SFMLRender::create_window(unsigned int width, unsigned int height,
                                const std::string &name,
                                unsigned int fps_limit) {
   if (!win.isOpen()) {
-    // Style::Default = titlebar + close + resizable
-    win.create(sf::VideoMode(width, height), name, sf::Style::Default);
+    // Style::Default = titlebar + close + resizable, antialiased shapes
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    win.create(sf::VideoMode(width, height), name, sf::Style::Default,
+               settings);
     win.setFramerateLimit(fps_limit);
     refit();
   } else {
@@ -96,6 +100,8 @@ void SFMLRender::setDefaultCircleColor(const Color &c) {
   default_circle_color = c;
 }
 void SFMLRender::setDefaultLineColor(const Color &c) { default_line_color = c; }
+void SFMLRender::setLineWidth(float pixels) { line_px = pixels; }
+void SFMLRender::setOutlineWidth(float pixels) { outline_px = pixels; }
 
 // --- Renderer Interface Implementation ---
 
@@ -110,10 +116,17 @@ void SFMLRender::drawCircle(const Vec2 &center, float radius) {
 void SFMLRender::drawCircle(const Vec2 &center, float radius,
                             const Color &color) {
   float pixel_radius = radius * scale;
-  sf::CircleShape circle(pixel_radius);
+  sf::CircleShape circle(pixel_radius, 48);
   circle.setOrigin(pixel_radius, pixel_radius);
   circle.setPosition(worldToScreen(center));
   circle.setFillColor(toSfColor(color));
+  // Contour plus sombre de la meme teinte, comme les noeuds des schemas
+  if (pixel_radius > 3.f) {
+    auto dark = [](sf::Uint8 v) { return static_cast<sf::Uint8>(v * 0.62f); };
+    circle.setOutlineThickness(-outline_px);
+    circle.setOutlineColor(
+        sf::Color(dark(color.r), dark(color.g), dark(color.b), color.a));
+  }
   win.draw(circle);
 }
 
@@ -122,10 +135,19 @@ void SFMLRender::drawLine(const Vec2 &p1, const Vec2 &p2) {
 }
 
 void SFMLRender::drawLine(const Vec2 &p1, const Vec2 &p2, const Color &color) {
-  sf::Color sf_color = toSfColor(color);
-  const sf::Vertex line[] = {sf::Vertex(worldToScreen(p1), sf_color),
-                             sf::Vertex(worldToScreen(p2), sf_color)};
-  win.draw(line, 2, sf::Lines);
+  const sf::Color sf_color = toSfColor(color);
+  const sf::Vector2f a = worldToScreen(p1), b = worldToScreen(p2);
+  const sf::Vector2f d = b - a;
+  const float len = std::sqrt(d.x * d.x + d.y * d.y);
+  if (len < 1e-3f)
+    return;
+  // Segment epais : un quadrilatere de largeur line_px autour de [a, b]
+  const sf::Vector2f n(-d.y / len * line_px / 2.f, d.x / len * line_px / 2.f);
+  const sf::Vertex quad[] = {sf::Vertex(a + n, sf_color),
+                             sf::Vertex(b + n, sf_color),
+                             sf::Vertex(b - n, sf_color),
+                             sf::Vertex(a - n, sf_color)};
+  win.draw(quad, 4, sf::Quads);
 }
 
 void SFMLRender::display() { win.display(); }
@@ -134,12 +156,22 @@ void SFMLRender::display() { win.display(); }
 
 // Draw the outline of the world area [0,w]x[0,h] (needs fitWorld)
 void SFMLRender::drawWorldFrame(const Color &color) {
-  Vec2 a(0.f, 0.f), b(world_size.x, 0.f), c(world_size.x, world_size.y),
-      d(0.f, world_size.y);
-  drawLine(a, b, color);
-  drawLine(b, c, color);
-  drawLine(c, d, color);
-  drawLine(d, a, color);
+  const Vec2 corners[] = {Vec2(0.f, 0.f), Vec2(world_size.x, 0.f),
+                          Vec2(world_size.x, world_size.y),
+                          Vec2(0.f, world_size.y)};
+  // Pointilles : traits de 9 px, espaces de 6 px
+  const float on = 4.5f * line_px / scale, off = 3.f * line_px / scale;
+  const float saved = line_px;
+  line_px = 0.75f * line_px;
+  for (int i = 0; i < 4; i++) {
+    const Vec2 &p = corners[i];
+    const Vec2 &q = corners[(i + 1) % 4];
+    const float len = (q - p).norm();
+    const Vec2 u = (q - p) / len;
+    for (float t = 0.f; t < len; t += on + off)
+      drawLine(p + u * t, p + u * std::min(t + on, len), color);
+  }
+  line_px = saved;
 }
 
 // Draw a horizontal ground line at world coordinate y = ground_y

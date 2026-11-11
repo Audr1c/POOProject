@@ -1,0 +1,30 @@
+% !TEX root = ../main.tex
+% Thème de polices RESSORTS : TeX Gyre Heros (clone d'Helvetica) pour coller aux
+% étiquettes des schémas draw.io ; Fira Mono pour le code et les noms de signaux.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerfontthemeressorts}[2026/09/15 v0.1 RESSORTS font theme]
+\mode<presentation>
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{tgheros}                      % <- police du corps (Helvetica-like)
+% Variante possible (commenter tgheros ci-dessus avant de l'activer) :
+% \RequirePackage[sfdefault,lining]{FiraSans}
+\RequirePackage[scaled=0.86]{FiraMono}
+\renewcommand{\familydefault}{\sfdefault}
+
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize,series=\mdseries}
+\setbeamerfont{author}{size=\large,series=\bfseries}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\mdseries}
+\setbeamerfont{section title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{section in toc}{size=\small}
+\setbeamerfont{footline}{size=\tiny}
+\setbeamerfont{page number in head/foot}{size=\tiny,series=\bfseries}
+\setbeamerfont{block title}{size=\small,series=\bfseries}
+\setbeamerfont{caption}{size=\scriptsize}
+\setbeamerfont{caption name}{size=\scriptsize,series=\bfseries}
+
+\mode<all>

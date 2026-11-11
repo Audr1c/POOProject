@@ -1,0 +1,48 @@
+% !TEX root = main.tex
+% Preambule : volontairement minimal (beamer charge deja hyperref).
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+% La bibliotheque babel de TikZ neutralise la ponctuation active (; : ! ?)
+% que babel-french installe : sans elle, tout chemin TikZ casse.
+\usetikzlibrary{calc,positioning,arrows.meta,fit,backgrounds,patterns,
+  decorations.pathreplacing,decorations.pathmorphing,shapes.geometric,babel}
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fontawesome5}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{listings}
+\lstdefinestyle{cpp}{
+  language=C++,
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{astblue}\bfseries,
+  commentstyle=\color{textgrey}\itshape,
+  stringstyle=\color{datagreen!60!black},
+  emph={Particle,Entity,World,Spring,Force,Drawable,Vec2,Integrator,Euler,Verlet,
+        Gravity,Drag,Wind,Renderer,ParticleList,Scene,SceneInstance},
+  emphstyle=\color{phelmared},
+  morekeywords={override,nullptr,constexpr,auto},
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{astrulegrey},
+  backgroundcolor=\color{astframefill},
+  xleftmargin=2mm,xrightmargin=2mm,
+  showstringspaces=false,
+  tabsize=2,
+  literate={é}{{\'e}}1 {è}{{\`e}}1 {à}{{\`a}}1,
+}
+\lstset{style=cpp}
+
+\pdfsuppresswarningpagegroup=1
+\hypersetup{
+  pdftitle={Moteur masses-ressorts : projet de programmation orientée objet},
+  pdfauthor={Léo Dorval, Nicolas Marcel, Audric Siguret},
+  pdfsubject={Projet POO C++ - Phelma 3A SEI},
+  pdfpagemode=UseNone,
+  pdfstartview=Fit,
+  pdfdisplaydoctitle=true,
+  hidelinks,
+}

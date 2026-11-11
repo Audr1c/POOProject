@@ -1,7 +1,7 @@
 #include "drawable.hpp"
 
 Drawable::Drawable()
-    : Entity("Drawable"), stroke_color(255, 255, 255), fill_color(255, 140, 0),
+    : Entity("Drawable"), stroke_color(35, 68, 93), fill_color(231, 111, 81),
       stroke_width(1.0f), visible(true) {}
 
 Drawable::Drawable(const Color &fill, const Color &stroke, float width,

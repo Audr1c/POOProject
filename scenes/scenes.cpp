@@ -41,16 +41,17 @@ namespace {
 
 const float kPi = 3.14159265f;
 
-// Palette
-const Color kAnchor(200, 200, 215);
-const Color kOrange(255, 140, 0);
-const Color kTeal(40, 200, 180);
-const Color kPink(240, 90, 160);
-const Color kYellow(250, 210, 60);
-const Color kViolet(160, 110, 240);
-const Color kGreen(110, 210, 90);
-const Color kSoftWhite(220, 220, 230);
-const Color kDim(150, 150, 170);
+// Palette : celle de la presentation (charte Phelma + schemas draw.io)
+const Color kAnchor(42, 46, 71);     // marine Grenoble INP : points fixes
+const Color kOrange(231, 111, 81);   // orange
+const Color kTeal(28, 161, 142);     // vert d'eau
+const Color kPink(189, 29, 29);      // rouge Phelma
+const Color kYellow(255, 176, 32);   // or
+const Color kViolet(150, 115, 166);  // violet
+const Color kGreen(98, 160, 70);     // vert
+const Color kBlue(51, 108, 230);     // bleu
+const Color kSoftWhite(35, 68, 93);  // ardoise (ressorts neutres)
+const Color kDim(170, 172, 173);     // gris clair
 
 Particle &anchor(SceneInstance &s, const Vec2 &pos, float radius = 0.08f) {
   Particle &p = s.addParticle(pos, 1.f, radius, 0.f, false);
@@ -336,7 +337,7 @@ void buildZeroG(SceneInstance &s) {
   s.drag.setCoefficient(0.f);
 
   // Spinning ring: rotation + translation
-  Ring big = makeBlob(s, {4.f, 4.f}, 1.2f, 16, 0.1f, 0.3f, 1.f, kTeal, 500.f,
+  Ring big = makeBlob(s, {4.f, 4.f}, 1.2f, 16, 0.1f, 0.3f, 1.f, kBlue, 500.f,
                       200.f, 200.f, 0.f);
   const float omega = 3.f; // rad/s
   for (Particle *p : big.rim) {

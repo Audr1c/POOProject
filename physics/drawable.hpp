@@ -15,11 +15,11 @@ protected:
 public:
   Drawable();
 
-  Drawable(const Color &fill, const Color &stroke = Color(255, 255, 255),
+  Drawable(const Color &fill, const Color &stroke = Color(35, 68, 93),
            float width = 1.0f, bool is_visible = true);
 
   Drawable(const std::string &name, const Color &fill,
-           const Color &stroke = Color(255, 255, 255), float width = 1.0f,
+           const Color &stroke = Color(35, 68, 93), float width = 1.0f,
            bool is_visible = true);
 
   virtual ~Drawable() = default;

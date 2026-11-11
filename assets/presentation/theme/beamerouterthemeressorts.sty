@@ -1,0 +1,108 @@
+% !TEX root = ../main.tex
+% Thème externe RESSORTS : bandeau haut (titre + embleme + logo Phelma) et bandeau bas
+% (auteur, section, numéro de page dans un badge rouge, barre de progression).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerouterthemeressorts}[2026/09/15 v0.1 RESSORTS outer theme]
+\mode<presentation>
+\RequirePackage{tikz}
+\RequirePackage{calc}
+\RequirePackage{graphicx}
+\RequirePackage{etoolbox}
+
+% Beamer mesure les bandeaux à \begin{document}, hors de toute frame : à cet
+% instant \insertframetitle n'existe pas encore. On les rend inoffensifs.
+\providecommand{\insertframetitle}{}
+\providecommand{\insertframesubtitle}{}
+
+% ------------------------------------------------------------------- dimensions
+\newlength{\astheadheight}      \setlength{\astheadheight}{1.25cm}
+\newlength{\astfootheight}      \setlength{\astfootheight}{0.55cm}
+\newlength{\astprogressheight}  \setlength{\astprogressheight}{0.6mm}
+\newlength{\astlogoheight}      \setlength{\astlogoheight}{0.42cm}
+\newlength{\astlogogap}         \setlength{\astlogogap}{0.35cm}
+\newlength{\astmargin}          \setlength{\astmargin}{0.7cm}
+\newlength{\astprogresslen}
+\newlength{\astlogostripwidth}
+\newlength{\asttitlewidth}
+\newsavebox{\astheadbox}
+\setbeamersize{text margin left=\astmargin,text margin right=\astmargin}
+
+% ------------------------------------------------------------- logos du bandeau
+% Seulement Phelma, suivi de l'embleme du projet (dessine en TikZ, voir le
+% theme interne). Chemin redefinissable depuis main.tex si besoin.
+\newcommand{\astlogophelma}{logos/Grenoble-Phelma-Logo.png}
+\newcommand{\astlogoscalephelma}{1.30}
+\newcommand{\astlogostrip}{%
+  \raisebox{-0.5\height}{\ressortsmark[0.95]}%
+  \hspace{\astlogogap}%
+  \raisebox{-0.5\height}{\includegraphics[height=\astlogoscalephelma\astlogoheight]{\astlogophelma}}}
+\AtBeginDocument{%
+  \settowidth{\astlogostripwidth}{\astlogostrip}%
+  \setlength{\asttitlewidth}{\paperwidth-2\astmargin-\astlogostripwidth-0.5cm}}
+
+% ------------------------------------------------------------ drapeau « annexes »
+% Permet d'afficher A1, A2... après \appendix sans dépendre des internes
+% d'appendixnumberbeamer.
+\newif\ifastinappendix
+\AtBeginDocument{\apptocmd{\appendix}{\global\astinappendixtrue}{}{}}
+
+% --------------------------------------------------------------- bandeau du haut
+\setbeamertemplate{headline}{%
+  \sbox\astheadbox{%
+    \begin{minipage}{\asttitlewidth}\raggedright
+      {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle}%
+      \ifx\insertframesubtitle\@empty\else
+        \par\vspace{0.3ex}%
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}%
+      \fi
+    \end{minipage}}%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\astheadheight);
+    \node[anchor=west,inner sep=0] at (\astmargin,0.60\astheadheight) {\usebox\astheadbox};
+    \node[anchor=east,inner sep=0] at (\paperwidth-\astmargin,0.60\astheadheight) {\astlogostrip};
+    \draw[astrulegrey,line width=0.4pt] (\astmargin,0.13cm) -- (\paperwidth-\astmargin,0.13cm);
+    \fill[phelmared] (\astmargin,0.13cm-0.5pt) rectangle (\astmargin+1.4cm,0.13cm+0.5pt);
+  \end{tikzpicture}%
+}
+% Le titre est déjà composé dans le bandeau : le gabarit frametitle reste vide.
+\setbeamertemplate{frametitle}{}
+
+% ---------------------------------------------------------------- badge de page
+\newcommand{\astpagebadge}{%
+  \ifastinappendix A\insertframenumber
+  \else \insertframenumber\,/\,\inserttotalframenumber\fi}
+
+% ---------------------------------------------------------------- bandeau du bas
+\setbeamertemplate{footline}{%
+  % Garde-fou : au premier passage \inserttotalframenumber vaut 0.
+  \ifnum\inserttotalframenumber>0
+    \setlength{\astprogresslen}{\paperwidth * \ratio{\insertframenumber pt}{\inserttotalframenumber pt}}%
+  \else
+    \setlength{\astprogresslen}{0pt}%
+  \fi
+  \usebeamercolor{footline}\colorlet{astfootfg}{fg}%
+  \usebeamercolor{structure}\colorlet{astsecfg}{fg}%
+  \usebeamercolor{page number in head/foot}\colorlet{astbadgefg}{fg}\colorlet{astbadgebg}{bg}%
+  \usebeamercolor{progress bar}\colorlet{astprogfg}{fg}\colorlet{astprogbg}{bg}%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\astfootheight);
+    \ifastprogressbar
+      \fill[astprogbg] (0,0) rectangle (\paperwidth,\astprogressheight);
+      \fill[astprogfg] (0,0) rectangle (\astprogresslen,\astprogressheight);
+    \fi
+    \node[anchor=west,inner sep=0,font=\tiny,text=astfootfg]
+      at (\astmargin,0.5\astfootheight+0.5\astprogressheight)
+      {\insertshortauthor\ {\color{astdivider}\textbar}\ \insertshorttitle};
+    \node[anchor=center,inner sep=0,font=\tiny,text=astsecfg]
+      at (0.5\paperwidth,0.5\astfootheight+0.5\astprogressheight) {\insertsectionhead};
+    \node[anchor=east,inner sep=1.7pt,rounded corners=1.2pt,fill=astbadgebg,text=astbadgefg,
+          font=\tiny\bfseries]
+      at (\paperwidth-\astmargin,0.5\astfootheight+0.5\astprogressheight) {\astpagebadge};
+  \end{tikzpicture}%
+}
+
+\mode<all>
+
+% Regle de mise en page : un sous-titre de bandeau doit tenir sur UNE ligne,
+% soit environ 45 caracteres. Au-dela il passe sur deux lignes et touche le
+% filet. Idem pour le titre : deux lignes au maximum.

@@ -12,9 +12,12 @@ private:
   Vec2 offset{0.0f, 0.0f}; // Origin offset in pixels
   Vec2 world_size{0.0f, 0.0f}; // Visible world area in meters (0 = no auto-fit)
   bool flip_y = true;      // If true, +y in physics points upwards on screen
-  Color bg_color{30, 30, 40, 255};
-  Color default_circle_color{255, 140, 0, 255};
-  Color default_line_color{255, 255, 255, 255};
+  // Charte graphique de la presentation (theme clair facon draw.io)
+  Color bg_color{245, 247, 251, 255};            // astframefill
+  Color default_circle_color{231, 111, 81, 255}; // orange
+  Color default_line_color{35, 68, 93, 255};     // ardoise
+  float line_px = 2.f;    // epaisseur des ressorts (pixels)
+  float outline_px = 1.5f; // contour des particules (pixels)
 
   static sf::Color toSfColor(const Color &c);
 
@@ -71,6 +74,8 @@ public:
   void setBackgroundColor(const Color &c);
   void setDefaultCircleColor(const Color &c);
   void setDefaultLineColor(const Color &c);
+  void setLineWidth(float pixels);
+  void setOutlineWidth(float pixels);
 
   // --- Renderer Interface Implementation ---
 
@@ -88,8 +93,9 @@ public:
 
   // --- Scene Helpers ---
 
-  // Draw the outline of the world area [0,w]x[0,h] (needs fitWorld)
-  void drawWorldFrame(const Color &color = Color(120, 120, 140));
+  // Draw the outline of the world area [0,w]x[0,h] (needs fitWorld), dashed
+  // like the stage frames of the presentation diagrams
+  void drawWorldFrame(const Color &color = Color(170, 172, 173));
 
   // Draw a horizontal ground line at world coordinate y = ground_y
   void drawGround(float ground_y, const Color &color = Color(120, 120, 140));

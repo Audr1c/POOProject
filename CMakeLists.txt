@@ -64,3 +64,8 @@ target_link_libraries(scenes_test PRIVATE scenes physics)
 
 target_compile_options(sfml PRIVATE -Wall -Wextra -Werror)
 target_link_libraries(sfml PRIVATE sfml-graphics)
+
+# Captures d'ecran des scenes pour la presentation (voir assets/presentation)
+add_executable(capture ./app/capture.cpp)
+target_compile_options(capture PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(capture PRIVATE scenes physics render sfml-graphics)

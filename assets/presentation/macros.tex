@@ -1,0 +1,137 @@
+% !TEX root = main.tex
+% Outils de mise en page : reprise de ceux de la soutenance de stage
+% (diagramoverlay, callouts, pastilles, fiche d'orateur), plus quelques
+% outils propres au projet (captures, classes UML, puces de fichier).
+
+% Hauteur utile pour une image : la page moins les deux bandeaux, moins un jeu.
+\newlength{\astdiagheight}
+\setlength{\astdiagheight}{\dimexpr\paperheight-\astheadheight-\astfootheight-0.7cm\relax}
+
+% Separateur entre mots-cles :  surface \astsep fuite
+\newcommand{\astsep}{\;\textperiodcentered\;}
+
+% ---------------------------------------------------------------------------
+% diagramoverlay : on dessine sur une image en coordonnees relatives,
+% (0,0) = coin bas gauche, (1,1) = coin haut droit.
+% ---------------------------------------------------------------------------
+\newif\ifastdiaggrid
+\newcommand{\astdrawgrid}{%
+  \draw[cyan!60,very thin,step=0.1] (0,0) grid (1,1);
+  \foreach \i in {0,0.1,...,1.01}{%
+    \node[font=\tiny,text=cyan!70!black,anchor=north] at (\i,0)
+      {\pgfmathprintnumber[fixed,precision=1]{\i}};
+    \node[font=\tiny,text=cyan!70!black,anchor=east] at (0,\i)
+      {\pgfmathprintnumber[fixed,precision=1]{\i}};}}
+
+\NewDocumentEnvironment{diagramoverlay}{O{} m}{%
+  \begin{center}%
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0,outer sep=0] (img) at (0,0)
+      {\includegraphics[width=\textwidth,height=\astdiagheight,keepaspectratio,#1]{#2}};
+    \begin{scope}[x={(img.south east)},y={(img.north west)}]
+      \ifastdiaggrid\astdrawgrid\fi
+}{%
+    \end{scope}
+  \end{tikzpicture}%
+  \end{center}%
+}
+
+\tikzset{astcallout/.style={draw=phelmared,fill=white,text=inpnavy,rounded corners=1.5pt,
+  line width=0.8pt,font=\footnotesize,inner sep=3pt,align=left}}
+\NewDocumentCommand{\highlight}{D<>{1-} O{phelmared} m m m m}{%
+  \only<#1>{\draw[#2,line width=1.2pt,rounded corners=2pt] (#3,#4) rectangle (#5,#6);}}
+\NewDocumentCommand{\spotlight}{D<>{1-} m m m m}{%
+  \only<#1>{\fill[white,fill opacity=0.66,even odd rule]
+    (0,0) rectangle (1,1) (#2,#3) rectangle (#4,#5);}}
+\tikzset{astnum/.style={circle,fill=phelmared,draw=white,line width=0.6pt,text=white,
+  font=\scriptsize\bfseries,inner sep=0pt,minimum size=4.2mm}}
+\newcommand{\astmark}[3]{\node[astnum] at (#1,#2) {#3};}
+\NewDocumentCommand{\callout}{D<>{1-} O{} m m m}{%
+  \only<#1>{\node[astcallout,#2] at (#3,#4) {#5};}}
+% Etiquette reliee par une fleche :  \astpoint{x}{y}{xe}{ye}{ancre}{texte}
+\newcommand{\astpoint}[6]{%
+  \node[astcallout,anchor=#5] (astpt) at (#3,#4) {#6};
+  \draw[-{Latex[length=1.6mm]},phelmared,line width=0.8pt] (astpt.#5) -- (#1,#2);}
+\newcommand{\astpill}[1]{\tikz[baseline=(astp.base)]\node[astnum] (astp) {#1};}
+
+% ---------------------------------------------------------------------------
+% Projet : puces de code et de fichier
+% ---------------------------------------------------------------------------
+% \code{dynamic_cast}   mot de code dans le texte
+\newcommand{\code}[1]{{\ttfamily\color{combislate}#1}}
+% \filechip{world.hpp}  petite etiquette de fichier, grise
+\newcommand{\filechip}[1]{\tikz[baseline=(fc.base)]\node[fill=asttrack,text=textgrey,
+  rounded corners=1pt,inner xsep=2pt,inner ysep=1.2pt,font=\ttfamily\tiny] (fc) {#1};}
+
+% ---------------------------------------------------------------------------
+% Classes UML dans le langage des schemas : bord colore, fond pale.
+%   \node[cls=memborder/memfill] (P) {\clsname{Particle}\clsbody{pos, speed\\mass}};
+% ---------------------------------------------------------------------------
+\tikzset{
+  cls/.style args={#1/#2}{draw=#1,fill=#2,line width=0.8pt,rounded corners=1.6mm,
+    align=center,inner sep=1.4mm,font=\scriptsize,text=astbodyfg},
+  abstract/.style={dash pattern=on 3pt off 1.5pt},
+  blackbox/.style={draw=floorgrey,fill=asttrack,line width=0.8pt,rounded corners=1.6mm,
+    align=center,inner sep=1.4mm,font=\scriptsize,text=textgrey},
+  inherit/.style={-{Triangle[open,length=2.4mm,width=2.4mm]},line width=0.7pt,draw=combislate},
+  vinherit/.style={inherit,draw=phelmared,line width=1pt},
+  owns/.style={{Diamond[length=2.6mm,width=1.8mm]}-{Latex[length=1.6mm]},line width=0.7pt,draw=combislate},
+  uses/.style={-{Latex[length=1.6mm]},line width=0.7pt,draw=combislate,dash pattern=on 2pt off 1.5pt},
+  flow/.style={-{Latex[length=2mm]},line width=1pt,draw=inpnavy},
+}
+\newcommand{\clsname}[1]{{\bfseries\small #1}}
+\newcommand{\clsabstract}[1]{{\bfseries\itshape\small #1}}
+% Le corps passe par un tabular : dans un noeud TikZ, un \\ remet la police
+% du noeud, et un \\ dans un groupe casse le noeud.
+\newcommand{\clsbody}[1]{\\[-0.2ex]{\color{textgrey}\tiny
+  \renewcommand{\arraystretch}{0.9}\begin{tabular}{@{}c@{}}#1\end{tabular}}}
+\newcommand{\clsleaf}[1]{{\bfseries\footnotesize #1}}
+
+% ---------------------------------------------------------------------------
+% \scenecard{fichier}{nom}{hauteur}  capture d'une scene dans un cadre
+% d'etage pointille, avec le nom sur le bord bas (comme les etages des schemas)
+% ---------------------------------------------------------------------------
+\newcommand{\scenecard}[3]{%
+  \begin{tikzpicture}
+    \node[inner sep=0] (sc) {\includegraphics[height=#3]{#1}};
+    \draw[floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=1.5mm]
+      ($(sc.south west)+(-1mm,-1mm)$) rectangle ($(sc.north east)+(1mm,1mm)$);
+    \node[fill=white,draw=combislate,line width=0.6pt,font=\tiny\bfseries,
+      inner xsep=1.5mm,inner ysep=0.8mm] at ($(sc.south)+(0,-1mm)$) {\MakeUppercase{#2}};
+  \end{tikzpicture}}
+
+% ---------------------------------------------------------------------------
+% \astbig[couleur]{400}{particules}   grand nombre et sa legende
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\astbig}{O{inpnavy} m m}{%
+  \begin{center}
+    {\fontsize{24}{28}\selectfont\bfseries\color{#1}#2}\\[0.3mm]
+    {\footnotesize\color{textgrey}#3}
+  \end{center}}
+
+% ---------------------------------------------------------------------------
+% Fiche d'orateur (cible << fiche >>) : pour chaque diapositive, quelques
+% reperes courts, a imprimer et a garder a cote.
+%   \astcue{ \cue{idee, \cuekey{mot cle}} \cuewarn{piege} \cuenext{transition} }
+% ---------------------------------------------------------------------------
+\newcommand{\cuekey}[1]{\textbf{\color{phelmared}#1}}
+\newcommand{\cue}[1]{\item[{\color{phelmared}$\rightarrow$}] #1}
+\newcommand{\cuewarn}[1]{\item[{\color{dummyorange}\footnotesize\faExclamationTriangle}] {\color{dummyorange!80!black}#1}}
+\newcommand{\cuenext}[1]{\item[{\color{astblue}\footnotesize\faShare}] {\color{astblue}\itshape #1}}
+\ifdefined\astfichemode
+  \setbeamertemplate{note page}{%
+    \vspace*{2mm}%
+    \begin{minipage}[t]{0.36\linewidth}\vspace{0pt}%
+      \fbox{\insertslideintonotes{0.30}}%
+    \end{minipage}\hspace{3mm}%
+    \begin{minipage}[t]{0.58\linewidth}\vspace{1mm}%
+      {\normalsize\bfseries\color{inpnavy}\insertframetitle}\par\vspace{1mm}%
+      {\scriptsize\color{textgrey}diapositive \insertframenumber}%
+    \end{minipage}\par\vspace{2mm}%
+    \begin{minipage}[t]{0.97\linewidth}%
+      \small\raggedright\insertnote
+    \end{minipage}}
+  \newcommand{\astcue}[1]{\note{\begin{itemize}\setlength{\itemsep}{1.2mm}#1\end{itemize}}}
+\else
+  \newcommand{\astcue}[1]{}
+\fi

@@ -1,0 +1,156 @@
+% !TEX root = ../main.tex
+% Theme interne RESSORTS : page de titre, page de partie, listes, et les boites
+% tcolorbox qui reprennent la semantique des noeuds des schemas draw.io.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerinnerthemeressorts}[2026/09/15 v0.1 RESSORTS inner theme]
+\mode<presentation>
+\RequirePackage{tikz}
+\usetikzlibrary{calc,decorations.pathmorphing}
+\RequirePackage{amssymb}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins}
+\RequirePackage{etoolbox}
+
+% ------------------------------------------------- metadonnees supplementaires
+\newcommand{\astsupervisors}[1]{\gdef\astsupervisorstext{#1}}
+\newcommand{\astinternship}[1]{\gdef\astinternshiptext{#1}}
+\newcommand{\asttitlelabel}{PROJET POO -- 3A SEI}
+
+% ------------------------------------------------------- embleme du projet
+% Une ancre, deux ressorts, deux masses : le moteur en un dessin.
+%   \ressortsemblem[echelle]   le dessin seul
+%   \ressortsmark[echelle]     le dessin + << masses-ressorts >> (bandeau)
+\tikzset{
+  rsspring/.style={decorate,decoration={zigzag,segment length=1.6mm,amplitude=0.9mm,
+    pre length=1.2mm,post length=1.2mm},line width=0.8pt,draw=combislate},
+}
+\newcommand{\ressortsemblem}[1][1]{%
+  \begin{tikzpicture}[scale=#1,transform shape,baseline=(rsa.center)]
+    \fill[inpnavy] (-0.08,-0.32) rectangle (0,0.32);
+    \foreach \y in {-0.28,-0.14,0,0.14,0.28}
+      \draw[inpnavy,line width=0.5pt] (-0.08,\y) -- (-0.2,\y-0.1);
+    \coordinate (rsa) at (0,0);
+    \draw[rsspring] (0,0) -- (1.05,0);
+    \node[circle,fill=timaorange,draw=timaorange!62!black,line width=0.7pt,
+      minimum size=3.2mm,inner sep=0] (rsm1) at (1.2,0) {};
+    \draw[rsspring] (rsm1.east) -- (2.25,0);
+    \node[circle,fill=phelmared,draw=phelmared!62!black,line width=0.7pt,
+      minimum size=4.2mm,inner sep=0] at (2.45,0) {};
+  \end{tikzpicture}}
+\newcommand{\ressortsmark}[1][1]{%
+  \begin{tikzpicture}[scale=#1,transform shape,baseline=(rsb.base)]
+    \node[inner sep=0] (rse) at (0,0) {\ressortsemblem[0.42]};
+    \node[anchor=west,inner sep=0,font=\bfseries\scriptsize,text=inpnavy] (rsb)
+      at ($(rse.east)+(0.12,0)$) {masses{\color{phelmared}\,\textperiodcentered\,}ressorts};
+  \end{tikzpicture}}
+\astsupervisors{}
+\astinternship{}
+
+% ----------------------------------------------------------- petit badge numero
+\newcommand{\astnumbadge}[2][phelmared]{%
+  \tikz[baseline=-0.55ex]\node[fill=#1,text=white,font=\tiny\bfseries,inner sep=1.4pt,
+    minimum width=1.8ex,minimum height=1.8ex,rounded corners=1.2pt]{#2};}
+
+% ------------------------------------------------------------------------ listes
+\setbeamertemplate{itemize item}{\raisebox{0.12ex}{\textcolor{phelmared}{\rule{0.72ex}{0.72ex}}}}
+\setbeamertemplate{itemize subitem}{\textcolor{inpnavy}{\scriptsize$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\textcolor{textgrey}{\textbullet}}
+\setbeamertemplate{enumerate item}{\astnumbadge{\insertenumlabel}}
+\setbeamertemplate{enumerate subitem}{\textcolor{inpnavy}{\insertenumlabel.\insertsubenumlabel}}
+\setbeamertemplate{caption}[numbered]
+
+% ------------------------------------- boites << draw.io >> (styles tcolorbox)
+\tcbset{
+  astbase/.style={enhanced,arc=2mm,boxrule=0.8pt,boxsep=0.7mm,
+    left=1.3mm,right=1.3mm,top=0.6mm,bottom=0.6mm,toptitle=0.4mm,bottomtitle=0.4mm,
+    fonttitle=\usebeamerfont{block title},titlerule=0.4pt,
+    before skip=1.2mm,after skip=1.2mm},
+  astkind/.style 2 args={astbase,colframe=#1,colback=#2,colbacktitle=#2,
+    coltitle=#1!75!black,titlerule style={#1}},
+}
+% Usage : \begin{memorybox}{Titre} ... \end{memorybox}
+%         \begin{memorybox}[width=5cm]{}   -> titre vide = pas de bandeau de titre
+\NewTColorBox{memorybox}{O{} m}{astkind={memborder}{memfill},title={#2},#1}
+\NewTColorBox{ctrlbox}{O{} m}{astkind={ctrlred}{ctrlfill},title={#2},#1}
+\NewTColorBox{dummybox}{O{} m}{astkind={dummyorange}{dummyfill},title={#2},#1}
+\NewTColorBox{databox}{O{} m}{astkind={datagreen}{datafill},title={#2},#1}
+\NewTColorBox{sinkbox}{O{} m}{astkind={sinkpurple}{sinkfill},title={#2},#1}
+\NewTColorBox{combibox}{O{} m}{astkind={combislate}{combifill},title={#2},#1}
+\NewTColorBox{benchbox}{O{} m}{astbase,boxrule=0pt,colback=benchyellow,
+  colbacktitle=benchyellow,coltitle=benchgold!55!black,titlerule style={benchgold},
+  borderline={1pt}{0pt}{benchgold,dash pattern=on 4pt off 2.5pt},title={#2},#1}
+% Etage de pipeline : cadre gris pointille, etiquette centree sur le bord bas.
+\NewTColorBox{floor}{O{} m}{enhanced,arc=2.5mm,boxrule=0pt,colback=floorfill,
+  borderline={0.8pt}{0pt}{floorgrey,dash pattern=on 3pt off 2pt},
+  boxsep=0.7mm,left=1.8mm,right=1.8mm,top=1.5mm,bottom=4mm,
+  before skip=1.5mm,after skip=3mm,
+  overlay={\node[anchor=center,draw=combislate,line width=0.6pt,fill=white,
+    font=\scriptsize\bfseries,inner xsep=2mm,inner ysep=1mm]
+    at (frame.south) {\MakeUppercase{#2}};},#1}
+
+% Les blocs beamer reprennent ces habillages.
+\setbeamertemplate{block begin}{\begin{combibox}{\insertblocktitle}}
+\setbeamertemplate{block end}{\end{combibox}}
+\setbeamertemplate{block alerted begin}{\begin{ctrlbox}{\insertblocktitle}}
+\setbeamertemplate{block alerted end}{\end{ctrlbox}}
+\setbeamertemplate{block example begin}{\begin{databox}{\insertblocktitle}}
+\setbeamertemplate{block example end}{\end{databox}}
+
+% ------------------------------------------------------------------ page de titre
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \coordinate (P) at (current page.south west);
+    % cadre decoratif (meme langage graphique que les etages des schemas)
+    \draw[floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm]
+      ($(P)+(0.5cm,1.5cm)$) rectangle ($(P)+(15.5cm,8.55cm)$);
+    \node[fill=white,draw=combislate,line width=0.6pt,font=\scriptsize\bfseries,
+      inner xsep=2mm,inner ysep=1mm] at ($(P)+(8cm,1.5cm)$) {\asttitlelabel};
+    % embleme du projet
+    \node[anchor=center,inner sep=0] at ($(P)+(8cm,7.3cm)$) {\ressortsemblem[1.5]};
+    % titre et filet rouge
+    \node[text width=13.6cm,align=center,inner sep=0] at ($(P)+(8cm,5.8cm)$)
+      {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle};
+    \fill[phelmared] ($(P)+(6.7cm,4.85cm)$) rectangle ($(P)+(9.3cm,4.85cm+1.2pt)$);
+    % auteur
+    \node[anchor=center,inner sep=0] at ($(P)+(8cm,4.1cm)$)
+      {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor};
+    % ecole, puis cours
+    \node[anchor=center,inner sep=0,font=\small] at ($(P)+(8cm,3.1cm)$)
+      {\usebeamercolor[fg]{institute}\insertinstitute};
+    \node[anchor=center,inner sep=0,font=\small] at ($(P)+(8cm,2.45cm)$)
+      {\usebeamercolor[fg]{date}\astinternshiptext};
+    % logos institutionnels au pied, et badge de page
+    \node[anchor=south west,inner sep=0] at ($(P)+(0.75cm,0.45cm)$)
+      {\includegraphics[height=0.85cm]{\astlogophelma}};
+    \node[anchor=south east,inner sep=0,font=\scriptsize\bfseries,text=textgrey]
+      at ($(P)+(15.25cm,0.6cm)$) {C++17 \astsep{} CMake \astsep{} SFML 2.6};
+    \node[anchor=south,inner sep=1.7pt,rounded corners=1.2pt,fill=phelmared,text=white,
+      font=\tiny\bfseries] at ($(P)+(8cm,0.42cm)$) {\astpagebadge};
+  \end{tikzpicture}%
+}
+
+% ------------------------------------------------------------------ page de partie
+\setbeamertemplate{section in toc}{%
+  \leavevmode
+  \ifnum\inserttocsectionnumber=\c@section\relax
+    \astnumbadge{\inserttocsectionnumber}\hspace{0.6em}%
+    {\usebeamercolor[fg]{section in toc}\bfseries\inserttocsection}%
+  \else
+    \astnumbadge[astmutedbadge]{\inserttocsectionnumber}\hspace{0.6em}%
+    {\color{textgrey}\inserttocsection}%
+  \fi\par\vspace{0.7ex}}
+\setbeamertemplate{section in toc shaded}{\usebeamertemplate{section in toc}}
+\setbeamertemplate{section page}{%
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.58\textwidth}
+      \begin{floor}[height=4.9cm,valign=center,halign=center]{Partie \insertsectionnumber}
+        {\usebeamerfont{section title}\usebeamercolor[fg]{section title}\insertsectionhead\par}
+      \end{floor}
+    \end{column}\hfill
+    \begin{column}{0.36\textwidth}
+      {\tiny\bfseries\color{textgrey}PLAN\par\vspace{1.8mm}}
+      \tableofcontents[currentsection,hideallsubsections]
+    \end{column}
+  \end{columns}}
+
+\mode<all>

@@ -1,0 +1,38 @@
+% !TEX root = main.tex
+% =====================================================================
+%  Presentation du projet POO : moteur masses-ressorts (Phelma 3A SEI)
+%  Charte reprise de la soutenance de stage (theme << ressorts >>, dans theme/).
+%
+%  Compilation :  make            -> build/main.pdf
+%                 make fiche      -> build/main-fiche.pdf (fiche d'orateur)
+%                 make captures   -> regenere figures/scenes/*.png depuis le
+%                                    programme (cible CMake << capture >>)
+% =====================================================================
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\ifdefined\astfichemode
+  \usepackage{pgfpages}
+  \setbeameroption{show only notes}
+  \pgfpagesuselayout{4 on 1}[a4paper,landscape,border shrink=4mm]
+\fi
+
+\makeatletter
+\def\input@path{{theme/}}
+\makeatother
+\usetheme[progressbar=true,sectionpages=true]{ressorts}
+
+\input{preamble.tex}
+\input{macros.tex}
+
+% \astdiaggridtrue   % <- decommenter pour calibrer les overlays
+
+\title[Moteur masses-ressorts]{Moteur masses-ressorts en C++}
+\subtitle{Projet de programmation orientée objet}
+\author[Dorval\astsep Marcel\astsep Siguret]{Léo DORVAL\astsep Nicolas MARCEL\astsep Audric SIGURET}
+\institute[Phelma]{Grenoble INP -- Phelma\astsep 3\textsuperscript{e} année SEI}
+\date{2026}
+\astinternship{Programmation orientée objet en C++\astsep novembre 2026}
+
+\begin{document}
+\input{sections/apercu}
+\end{document}

@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+% Theme RESSORTS pour la soutenance de stage 2A (Audric SIGURET).
+% Design calque sur les schemas draw.io du rapport : blocs arrondis a fond pale
+% et bordure coloree, cadres d'etage en pointilles, rouge Phelma en accent.
+%
+% Options : progressbar=true|false    barre de progression en pied de page
+%           sectionpages=true|false   page de garde automatique par partie
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeressorts}[2026/09/15 v0.1 RESSORTS / Phelma / TIMA]
+\mode<presentation>
+
+\newif\ifastprogressbar  \astprogressbartrue
+\newif\ifastsectionpages \astsectionpagestrue
+\DeclareOptionBeamer{progressbar}[true]{\csname astprogressbar#1\endcsname}
+\DeclareOptionBeamer{sectionpages}[true]{\csname astsectionpages#1\endcsname}
+\ProcessOptionsBeamer
+
+\usecolortheme{ressorts}   % les couleurs d'abord : les autres themes s'y referent
+\usefonttheme{ressorts}
+\useoutertheme{ressorts}   % definit \astpagebadge, utilise par la page de titre
+\useinnertheme{ressorts}
+
+\setbeamertemplate{navigation symbols}{}
+
+\ifastsectionpages
+  \AtBeginSection[]{\begin{frame}{}\sectionpage\end{frame}}
+\fi
+
+\mode<all>

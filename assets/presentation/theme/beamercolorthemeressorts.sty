@@ -1,0 +1,71 @@
+% !TEX root = ../main.tex
+% Thème de couleurs RESSORTS : palette reprise des schémas draw.io du rapport
+% + identité Grenoble INP - Phelma / TIMA.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamercolorthemeressorts}[2026/09/15 v0.1 RESSORTS colour theme]
+\mode<presentation>
+\RequirePackage{xcolor}
+
+% ---------------------------------------------------------------- institutionnel
+\definecolor{phelmared}{HTML}{BD1D1D}   % rouge Phelma (logo)
+\definecolor{inpnavy}{HTML}{2A2E47}     % marine Grenoble INP (logo)
+\definecolor{timateal}{HTML}{264653}    % TIMA sombre
+\definecolor{timagreen}{HTML}{1CA18E}   % TIMA vert
+\definecolor{timaorange}{HTML}{E76F51}  % TIMA orange
+
+% ------------------------------------------------------------- logo / cadre RESSORTS
+\definecolor{astblue}{HTML}{336CE6}     % bordure du cadre RESSORTS (draw.io)
+\definecolor{astbluealt}{HTML}{2865ED}
+\definecolor{astbluelogo}{HTML}{4D63B9} % début du dégradé du logo
+\definecolor{astbluedark}{HTML}{1B4B7B} % fin du dégradé du logo
+\definecolor{astpink}{HTML}{FFA4FA}     % accent rose du chevron
+\definecolor{astviolet}{HTML}{A07FE6}
+\definecolor{astframefill}{HTML}{F5F7FB}
+
+% ------------------------------------------------- sémantique des noeuds draw.io
+\definecolor{memborder}{HTML}{336CE6}   \definecolor{memfill}{HTML}{E0F2FE}
+\definecolor{ctrlred}{HTML}{DC2626}     \definecolor{ctrlfill}{HTML}{FEE2E2}
+\definecolor{dummyorange}{HTML}{D79B00} \definecolor{dummyfill}{HTML}{FFE6CC}
+\definecolor{datagreen}{HTML}{82B366}   \definecolor{datafill}{HTML}{D5E8D4}
+\definecolor{sinkpurple}{HTML}{9673A6}  \definecolor{sinkfill}{HTML}{E1D5E7}
+\definecolor{combislate}{HTML}{23445D}  \definecolor{combifill}{HTML}{FFFFFF}
+\definecolor{benchgold}{HTML}{D6B656}   \definecolor{benchyellow}{HTML}{FEF9C3}
+\definecolor{floorgrey}{HTML}{AAACAD}   \definecolor{floorfill}{HTML}{FBFBFC}
+\definecolor{tokengold}{HTML}{FFB020}
+\definecolor{textgrey}{HTML}{5F6368}
+
+% Teintes pré-mélangées : définies ici (dans le .sty) pour que le « ! » de xcolor
+% ne soit jamais lu alors que babel-french a rendu la ponctuation active.
+\colorlet{astrulegrey}{black!15}
+\colorlet{asttrack}{black!12}
+\colorlet{astdivider}{black!30}
+\colorlet{astmutedbadge}{black!28}
+\colorlet{astsubtlefg}{black!55}
+\colorlet{astbodyfg}{black!90}
+
+% ------------------------------------------------------------ affectations beamer
+\setbeamercolor{normal text}{fg=astbodyfg,bg=white}
+\setbeamercolor{structure}{fg=inpnavy}
+\setbeamercolor{alerted text}{fg=phelmared}
+\setbeamercolor{example text}{fg=datagreen!60!black}
+\setbeamercolor{title}{fg=inpnavy}
+\setbeamercolor{subtitle}{fg=textgrey}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{institute}{fg=textgrey}
+\setbeamercolor{date}{fg=textgrey}
+\setbeamercolor{frametitle}{fg=inpnavy,bg=white}
+\setbeamercolor{framesubtitle}{fg=textgrey}
+\setbeamercolor{section title}{fg=inpnavy}
+\setbeamercolor{section in toc}{fg=inpnavy}
+\setbeamercolor{footline}{fg=textgrey}
+\setbeamercolor{page number in head/foot}{fg=white,bg=phelmared}
+\setbeamercolor{progress bar}{fg=phelmared,bg=asttrack}
+\setbeamercolor{itemize item}{fg=phelmared}
+\setbeamercolor{itemize subitem}{fg=inpnavy}
+\setbeamercolor{itemize subsubitem}{fg=textgrey}
+\setbeamercolor{enumerate item}{fg=phelmared}
+\setbeamercolor{caption}{fg=textgrey}
+\setbeamercolor{caption name}{fg=inpnavy}
+\setbeamercolor{button}{fg=white,bg=inpnavy}
+
+\mode<all>
