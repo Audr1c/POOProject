@@ -1,7 +1,52 @@
-# POOProject
+# POOProject : moteur masses-ressorts en C++
 
+Un moteur physique 2D de particules reliees par des ressorts, ecrit en C++17
+pour le projet de POO (Phelma, S9 SEI). Treize scenes interactives : on attrape
+les particules a la souris, on epingle, on change d'integrateur en direct.
 
-### Usage
+<p align="center">
+  <img src="assets/presentation/figures/scenes/scene_05.png" width="70%" alt="Tissu de 20 x 20 particules suspendu par deux coins">
+  <br><sub>Tissu : 400 particules, 1 482 ressorts. Les ressorts tendus rougissent.</sub>
+</p>
+
+## Les scenes
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_02.png" alt="Double pendule"><br><sub>Double pendule</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_04.png" alt="Pont de corde"><br><sub>Pont de corde</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_06.png" alt="Blob"><br><sub>Blob</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_07.png" alt="Rideau au vent"><br><sub>Rideau au vent</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_08.png" alt="Gelee"><br><sub>Gelee</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_09.png" alt="Oscillateurs"><br><sub>Oscillateurs</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_11.png" alt="Apesanteur"><br><sub>Apesanteur</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_12.png" alt="Toile d'araignee"><br><sub>Toile d'araignee</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_13.png" alt="Tour en gelee"><br><sub>Tour en gelee</sub></td>
+  </tr>
+</table>
+
+## Architecture
+
+La physique ne connait pas SFML : elle dessine a travers l'interface abstraite
+`Renderer`, que seul `render/` implemente.
+
+<p align="center">
+  <img src="assets/readme/architecture.png" width="85%" alt="Architecture : scenes, app, bibliotheque physics et rendu SFML">
+</p>
+
+Les classes : `Particle` et `Spring` heritent virtuellement d'`Entity`
+(heritage en diamant via `Drawable` et `Force`), les forces et les
+integrateurs sont choisis par liaison dynamique, et `World` possede tout.
+
+<p align="center">
+  <img src="assets/readme/hierarchie.png" width="95%" alt="Hierarchie des classes">
+</p>
+
+## Usage
 
 Cloning the repo:
 ```sh
@@ -27,7 +72,7 @@ make poop # ninja poop
 
 
 
-### Scenes et commandes
+## Scenes et commandes
 
 `./poop` affiche la liste des scenes dans la console. Dans la fenetre :
 
@@ -55,18 +100,19 @@ cmake --build build --target scenes_test
 ./build/scenes_test
 ```
 
-### Presentation
+## Presentation
 
 Le diaporama (beamer) est dans `assets/presentation/` :
 ```sh
 cd assets/presentation
 make            # liste les commandes
-make all        # tout refaire : schemas, energie, captures, puis les deux PDF
+make all        # tout refaire : schemas, readme, energie, captures, puis les deux PDF
 make pdf        # build/main.pdf
 make fiche      # build/main-fiche.pdf, fiche d'orateur a imprimer
 make captures   # regenere les captures des scenes (cible CMake capture)
 make energie    # regenere les courbes d'energie Euler / Verlet (cible energie)
 make schemas    # exporte schemas/*.drawio en PDF (draw.io en ligne de commande)
+make readme     # PNG des schemas affiches dans ce README (assets/readme/)
 make clean      # supprime les fichiers de compilation LaTeX
 ```
 

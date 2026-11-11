@@ -6,7 +6,8 @@
 #   make captures   -> regenere figures/scenes/*.png depuis le programme
 #   make energie    -> regenere figures/data/energie_*.csv (Euler contre Verlet)
 #   make schemas    -> exporte schemas/*.drawio en figures/schemas/*.pdf
-#   make all        -> tout refaire : schemas, energie, captures, puis pdf et fiche
+#   make readme     -> PNG des schemas du README (assets/readme/)
+#   make all        -> tout refaire : schemas, readme, energie, captures, puis pdf et fiche
 #   make clean
 #
 # Les captures utilisent la cible CMake << capture >> (app/capture.cpp) : elle
@@ -49,7 +50,11 @@ RAW_DIR   = $(BUILD_DIR)/captures
 CXX_BIN  := $(shell sed -n 's|^CMAKE_CXX_COMPILER:FILEPATH=\(.*\)/[^/]*$$|\1|p' $(CMAKE_DIR)/CMakeCache.txt 2>/dev/null)
 WITH_CXX  = PATH="$$(cygpath -u '$(CXX_BIN)' 2>/dev/null || echo '$(CXX_BIN)'):$$PATH"
 
-.PHONY: help all pdf fiche captures energie schemas clean
+# Schemas montres dans le README du depot (GitHub n'affiche pas les PDF)
+README_DIR     = $(ROOT)/assets/readme
+README_SCHEMAS = architecture hierarchie
+
+.PHONY: help all pdf fiche captures energie schemas readme clean
 
 # Cible par defaut : un << make >> seul liste les commandes
 help:
@@ -59,7 +64,8 @@ help:
 	@echo "  make captures  -> regenere figures/scenes/*.png depuis le programme"
 	@echo "  make energie   -> regenere figures/data/energie_*.csv (Euler contre Verlet)"
 	@echo "  make schemas   -> exporte schemas/*.drawio en figures/schemas/*.pdf"
-	@echo "  make all       -> tout refaire : schemas, energie, captures, puis pdf et fiche"
+	@echo "  make readme    -> PNG des schemas du README (assets/readme/)"
+	@echo "  make all       -> tout refaire : schemas, readme, energie, captures, puis pdf et fiche"
 	@echo "  make clean     -> supprime les fichiers de compilation"
 
 # Tout regenerer dans l'ordre (les figures avant les PDF qui les incluent).
@@ -68,6 +74,7 @@ help:
 # que les figures ont change et repond << up-to-date >>.
 all:
 	$(MAKE) schemas
+	$(MAKE) readme
 	$(MAKE) energie
 	$(MAKE) captures
 	$(MAKE) pdf fiche LATEXMK_FLAGS=-g
@@ -110,3 +117,10 @@ energie:
 
 clean:
 	latexmk -C -outdir=$(BUILD_DIR) main.tex main-fiche.tex
+
+# PNG des schemas pour le README (pdftocairo : poppler, livre avec TeX Live/MiKTeX)
+readme: $(README_SCHEMAS:%=$(README_DIR)/%.png)
+
+$(README_DIR)/%.png: figures/schemas/%.pdf
+	@mkdir -p $(README_DIR)
+	pdftocairo -png -singlefile -r 150 $< $(basename $@)
