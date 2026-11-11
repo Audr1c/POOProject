@@ -60,9 +60,33 @@ cmake --build build --target scenes_test
 Le diaporama (beamer) est dans `assets/presentation/` :
 ```sh
 cd assets/presentation
-make            # build/main.pdf
+make            # liste les commandes
+make all        # tout refaire : schemas, energie, captures, puis les deux PDF
+make pdf        # build/main.pdf
 make fiche      # build/main-fiche.pdf, fiche d'orateur a imprimer
 make captures   # regenere les captures des scenes (cible CMake capture)
 make energie    # regenere les courbes d'energie Euler / Verlet (cible energie)
 make schemas    # exporte schemas/*.drawio en PDF (draw.io en ligne de commande)
+make clean      # supprime les fichiers de compilation LaTeX
 ```
+
+`make all` enchaine les etapes dans l'ordre (figures d'abord, puis les PDF) et
+force latexmk a recompiler pour prendre en compte les nouvelles figures. Il
+faut avoir compile le projet une fois (`cmake -S . -B build`) : les captures et
+les courbes d'energie lancent les cibles CMake `capture` et `energie`.
+Un schema n'est reexporte que si son `.drawio` est plus recent que son PDF
+(`make -B schemas` pour tout reexporter).
+
+Outils necessaires :
+
+| Outil | Pour | Remarque |
+| --- | --- | --- |
+| `latexmk` + pdfLaTeX (TeX Live, MiKTeX) | `pdf`, `fiche` | |
+| draw.io desktop (`drawio`) | `schemas` | sinon `make schemas DRAWIO="..."` |
+| ImageMagick (`magick`) | `captures` | optionnel : sans lui, capture directe en 1600x900, traits moins lisses |
+
+Le Makefile marche sous Linux, dans Git Bash et dans PowerShell. Sous Windows,
+il utilise le `sh` de Git for Windows (ou de MSYS2 dans `C:/msys64`) et lance
+les programmes avec le dossier du compilateur en tete du `PATH`, pour ne pas
+charger la `libstdc++` d'un autre MinGW. Sous Linux sans ecran :
+`make captures RUN="xvfb-run -a"`.

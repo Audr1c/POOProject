@@ -5,7 +5,7 @@ puis :
 
 ```sh
 make schemas   # exporte chaque .drawio modifié en figures/schemas/<nom>.pdf
-make           # recompile le diaporama
+make pdf       # recompile le diaporama
 ```
 
 Les diapositives incluent les PDF avec `\schema{<nom>}` (voir `macros.tex`).

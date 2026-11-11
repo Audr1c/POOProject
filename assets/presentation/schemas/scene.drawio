@@ -1,29 +1,81 @@
 <mxfile host="Electron" agent="schemas du diaporama POO">
   <diagram id="scene" name="scene">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827">
+    <mxGraphModel dx="1727" dy="1077" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="sc" value='&lt;b&gt;&lt;span style="font-size:27px"&gt;Scene&lt;/span&gt;&lt;/b&gt;&lt;br&gt;name, description&lt;br&gt;size (en mètres)&lt;br&gt;&lt;b&gt;build&lt;/b&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;std::function&lt;/span&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;&amp;lt;void(SceneInstance&amp;amp;)&amp;gt;&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="3.8" y="153.6" width="326.2" height="155.5" as="geometry"/></mxCell>
-        <mxCell id="bk0" value="" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" vertex="1" parent="1"><mxGeometry x="75.1" y="391.9" width="182.1" height="34.1" as="geometry"/></mxCell>
-        <mxCell id="bk1" value="" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" vertex="1" parent="1"><mxGeometry x="58.4" y="405.5" width="182.1" height="34.1" as="geometry"/></mxCell>
-        <mxCell id="cards" value='&lt;span style="font-size:16px"&gt;Pendule, Corde…&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" vertex="1" parent="1"><mxGeometry x="41.7" y="419.2" width="182.1" height="34.1" as="geometry"/></mxCell>
-        <mxCell id="x1" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;allScenes()&lt;/span&gt; : 13 scènes' style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#5F6368;spacing=0;" vertex="1" parent="1"><mxGeometry x="58.0" y="466.6" width="187.5" height="26.1" as="geometry"/></mxCell>
-        <mxCell id="x2" style="edgeStyle=none;html=1;rounded=0;strokeColor=#23445D;strokeWidth=1.9;dashed=1;dashPattern=4 3;endArrow=classic;endFill=1;endSize=7;exitX=0.4535;exitY=1.0024;exitDx=0;exitDy=0;" edge="1" parent="1" source="sc"><mxGeometry relative="1" as="geometry"><mxPoint x="151.7" y="390.0" as="targetPoint"/></mxGeometry></mxCell>
-        <mxCell id="inst" value="" style="rounded=1;absoluteArcSize=1;arcSize=45;html=1;fillColor=#FBFBFC;strokeColor=#AAACAD;strokeWidth=2.1;dashed=1;dashPattern=6 4;" vertex="1" parent="1"><mxGeometry x="629.7" y="151.7" width="478.0" height="341.4" as="geometry"/></mxCell>
-        <mxCell id="inst_lab" value="SCENEINSTANCE" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=1.6;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontStyle=1;fontColor=#23445D;" vertex="1" parent="1"><mxGeometry x="789.7" y="477.2" width="158.0" height="31.9" as="geometry"/></mxCell>
-        <mxCell id="m0" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;extra_forces&lt;/span&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;unique_ptr&amp;lt;Force&amp;gt;&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="644.9" y="182.1" width="356.6" height="37.9" as="geometry"/></mxCell>
-        <mxCell id="m1" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;gravity&lt;/span&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;Gravity&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="644.9" y="239.0" width="356.6" height="37.9" as="geometry"/></mxCell>
-        <mxCell id="m2" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;drag&lt;/span&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;Drag&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="644.9" y="295.9" width="356.6" height="37.9" as="geometry"/></mxCell>
-        <mxCell id="m3" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;time&lt;/span&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;float&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="644.9" y="352.8" width="356.6" height="37.9" as="geometry"/></mxCell>
-        <mxCell id="m4" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;world&lt;/span&gt; : &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;World&lt;/span&gt;' style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" vertex="1" parent="1"><mxGeometry x="644.9" y="421.1" width="356.6" height="37.9" as="geometry"/></mxCell>
-        <mxCell id="x3" style="edgeStyle=none;html=1;rounded=0;strokeColor=#BD1D1D;strokeWidth=2.1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2.7;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1016.7" y="455.2" as="sourcePoint"/><mxPoint x="1016.7" y="189.7" as="targetPoint"/></mxGeometry></mxCell>
-        <mxCell id="x4" value="ordre de&lt;br&gt;destruction" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#BD1D1D;spacing=0;" vertex="1" parent="1"><mxGeometry x="1024.2" y="299.4" width="115.3" height="46.1" as="geometry"/></mxCell>
-        <mxCell id="x5" style="edgeStyle=none;html=1;rounded=0;strokeColor=#2A2E47;strokeWidth=2.7;endArrow=classic;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.2333;entryDx=0;entryDy=0;" edge="1" parent="1" source="sc" target="inst"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
-        <mxCell id="x6" value='&lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;instantiate(scene, Verlet)&lt;/span&gt;' style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;spacing=0;" vertex="1" parent="1"><mxGeometry x="336.9" y="196.1" width="289.8" height="32.7" as="geometry"/></mxCell>
-        <mxCell id="x7" value='appelle &lt;span style="font-family:Fira Mono,Consolas,monospace;font-size:85%"&gt;build&lt;/span&gt;' style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#5F6368;spacing=0;" vertex="1" parent="1"><mxGeometry x="426.9" y="235.8" width="109.8" height="26.1" as="geometry"/></mxCell>
-        <mxCell id="tpl" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;s.addForce&amp;lt;Wind&amp;gt;(lambda, s.time, 0.035f)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;template variadique : construit n'importe quelle force&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BD1D1D;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#2A2E47;spacing=4;" vertex="1" parent="1"><mxGeometry x="191.7" y="324.3" width="451.2" height="72.2" as="geometry"/></mxCell>
-        <mxCell id="x8" style="edgeStyle=none;html=1;rounded=0;strokeColor=#BD1D1D;strokeWidth=2.1;endArrow=classic;endFill=1;endSize=8;curved=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tpl" target="m0"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="485.6" y="201.1"/></Array></mxGeometry></mxCell>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sc" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:27px&quot;&gt;Scene&lt;/span&gt;&lt;/b&gt;&lt;br&gt;name, description&lt;br&gt;size (en mètres)&lt;br&gt;&lt;b&gt;build&lt;/b&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;std::function&lt;/span&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;&amp;lt;void(SceneInstance&amp;amp;)&amp;gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="155.5" width="326.2" x="3.8" y="153.6" as="geometry" />
+        </mxCell>
+        <mxCell id="bk0" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="34.1" width="182.1" x="75.1" y="391.9" as="geometry" />
+        </mxCell>
+        <mxCell id="bk1" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" value="" vertex="1">
+          <mxGeometry height="34.1" width="182.1" x="58.4" y="405.5" as="geometry" />
+        </mxCell>
+        <mxCell id="cards" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;fillColor=#FFFFFF;" value="&lt;span style=&quot;font-size:16px&quot;&gt;Pendule, Corde…&lt;/span&gt;" vertex="1">
+          <mxGeometry height="34.1" width="182.1" x="41.7" y="419.2" as="geometry" />
+        </mxCell>
+        <mxCell id="x1" parent="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#5F6368;spacing=0;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;allScenes()&lt;/span&gt; : 13 scènes" vertex="1">
+          <mxGeometry height="26.1" width="187.5" x="58" y="466.6" as="geometry" />
+        </mxCell>
+        <mxCell id="x2" edge="1" parent="1" source="sc" style="edgeStyle=none;html=1;rounded=0;strokeColor=#23445D;strokeWidth=1.9;dashed=1;dashPattern=4 3;endArrow=classic;endFill=1;endSize=7;exitX=0.4535;exitY=1.0024;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="151.7" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inst" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=45;html=1;fillColor=#FBFBFC;strokeColor=#AAACAD;strokeWidth=2.1;dashed=1;dashPattern=6 4;" value="" vertex="1">
+          <mxGeometry height="341.4" width="410.3" x="629.7" y="151.7" as="geometry" />
+        </mxCell>
+        <mxCell id="inst_lab" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=1.6;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontStyle=1;fontColor=#23445D;" value="SCENEINSTANCE" vertex="1">
+          <mxGeometry height="31.9" width="158" x="789.7" y="477.2" as="geometry" />
+        </mxCell>
+        <mxCell id="m0" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;extra_forces&lt;/span&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;unique_ptr&amp;lt;Force&amp;gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="37.9" width="356.6" x="660" y="176.4" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;gravity&lt;/span&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;Gravity&lt;/span&gt;" vertex="1">
+          <mxGeometry height="37.9" width="356.6" x="660" y="233.3" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#336CE6;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;drag&lt;/span&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;Drag&lt;/span&gt;" vertex="1">
+          <mxGeometry height="37.9" width="356.6" x="660" y="290.2" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;time&lt;/span&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;float&lt;/span&gt;" vertex="1">
+          <mxGeometry height="37.9" width="356.6" x="660" y="347.1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;world&lt;/span&gt; : &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;World&lt;/span&gt;" vertex="1">
+          <mxGeometry height="37.9" width="356.6" x="660" y="415.40000000000003" as="geometry" />
+        </mxCell>
+        <mxCell id="x3" edge="1" parent="1" style="edgeStyle=none;html=1;rounded=0;strokeColor=#BD1D1D;strokeWidth=2.1;endArrow=classic;endFill=1;endSize=8;strokeWidth=2.7;">
+          <mxGeometry relative="1" x="-0.0519" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="320" />
+            </Array>
+            <mxPoint x="1050" y="450" as="sourcePoint" />
+            <mxPoint x="1050" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x4" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#BD1D1D;spacing=0;" value="ordre de&lt;br&gt;destruction" vertex="1">
+          <mxGeometry height="46.1" width="115.3" x="1060" y="299.34999999999997" as="geometry" />
+        </mxCell>
+        <mxCell id="x5" edge="1" parent="1" source="sc" style="edgeStyle=none;html=1;rounded=0;strokeColor=#2A2E47;strokeWidth=2.7;endArrow=classic;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.2333;entryDx=0;entryDy=0;" target="inst">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x6" parent="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;spacing=0;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;instantiate(scene, Verlet)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="32.7" width="289.8" x="336.9" y="196.1" as="geometry" />
+        </mxCell>
+        <mxCell id="x7" parent="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#5F6368;spacing=0;" value="appelle &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;build&lt;/span&gt;" vertex="1">
+          <mxGeometry height="26.1" width="109.8" x="426.9" y="235.8" as="geometry" />
+        </mxCell>
+        <mxCell id="x8" edge="1" parent="1" source="tpl" style="edgeStyle=none;html=1;rounded=0;strokeColor=#BD1D1D;strokeWidth=2.1;endArrow=classic;endFill=1;endSize=8;curved=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="m0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="485.6" y="201.1" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tpl" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#BD1D1D;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#2A2E47;spacing=4;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;s.addForce&amp;lt;Wind&amp;gt;(lambda, s.time, 0.035f)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;template variadique : construit n&#39;importe quelle force&lt;/span&gt;" vertex="1">
+          <mxGeometry height="72.2" width="451.2" x="150" y="50" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
