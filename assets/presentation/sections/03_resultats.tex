@@ -70,26 +70,7 @@ Wind &wind = s.addForce<Wind>(
 \begin{frame}{Les notions du cours, où les trouver}
   \framesubtitle{du plus simple au plus avancé}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    \foreach \i/\c/\f/\t/\b/\file in {
-      0/datagreen/datafill/Vec2/{opérateurs\\passage par \code{const\&}\\méthodes \code{const}}/vec2.hpp,
-      1/timagreen/timagreen!12/Constructeurs/{délégués\\liste d'initialisation\\\code{const}, \code{static}}/particles.cpp,
-      2/memborder/memfill/Polymorphisme/{\code{virtual}, \code{override}\\\code{enum class}\\fabrique}/force.hpp,
-      3/sinkpurple/sinkfill/Mémoire/{\code{deque}\\\code{unique\_ptr}\\copie \code{= delete}}/world.hpp,
-      4/ctrlred/ctrlfill/{Héritage\\multiple}/{diamant virtuel\\\code{dynamic\_cast}\\lambdas, template}/springs.hpp}
-    {
-      \node[cls=\c/\f,anchor=south west,minimum width=2.75cm,minimum height=2.3cm,
-        text width=2.5cm,align=left,inner sep=1.3mm] (st\i) at (\i*2.95,\i*0.85)
-        {{\bfseries\footnotesize\t}\\[0.8ex]{\scriptsize\b}};
-      \node[astnum] at (st\i.north west) {\the\numexpr\i+1\relax};
-      \node[anchor=south east,inner sep=0.6mm] at (st\i.north east) {\filechip{\file}};
-    }
-    \draw[-{Latex[length=2.4mm]},line width=1.4pt,phelmared,rounded corners=1mm]
-      (0,-0.15) -- (2.85,-0.15) -- (2.85,0.7) -- (5.8,0.7) -- (5.8,1.55) -- (8.75,1.55)
-      -- (8.75,2.4) -- (11.7,2.4) -- (11.7,3.25) -- (14.65,3.25) -- (14.65,4.6);
-    \node[anchor=north east,font=\tiny\bfseries,text=phelmared,align=right] at (14.55,0.5)
-      {plus abstrait,\\plus puissant};
-  \end{tikzpicture}
+  \schema{notions}
   \astcue{
     \cue{le tableau du sujet en une image : \cuekey{chaque notion a son fichier}}
     \cuenext{bilan}

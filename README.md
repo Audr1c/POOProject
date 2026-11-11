@@ -64,4 +64,5 @@ make            # build/main.pdf
 make fiche      # build/main-fiche.pdf, fiche d'orateur a imprimer
 make captures   # regenere les captures des scenes (cible CMake capture)
 make energie    # regenere les courbes d'energie Euler / Verlet (cible energie)
+make schemas    # exporte schemas/*.drawio en PDF (draw.io en ligne de commande)
 ```

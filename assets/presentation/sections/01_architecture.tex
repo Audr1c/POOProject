@@ -7,39 +7,7 @@
 \begin{frame}{Quatre dossiers, une frontière}
   \framesubtitle{le moteur ne connaît que l'interface \code{Renderer}}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % physics : la bibliotheque
-    \node[draw=floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm,
-      fill=floorfill,minimum width=9.2cm,minimum height=3.3cm] (phys) at (4.6,1.65) {};
-    \node[fill=white,draw=combislate,line width=0.6pt,font=\scriptsize\bfseries,
-      inner xsep=2mm,inner ysep=1mm] at (phys.south) {PHYSICS/ \astsep{} LIBPHYSICS.A};
-    \node[cls=datagreen/datafill,minimum width=1.9cm] (w) at (1.5,2.35) {\clsname{World}\clsbody{possède tout}};
-    \node[cls=datagreen/datafill,minimum width=1.9cm] (p) at (3.7,2.35) {\clsname{Particle}\clsbody{position, masse}};
-    \node[cls=datagreen/datafill,minimum width=1.9cm] (f) at (5.9,2.35) {\clsname{forces/}\clsbody{poids, ressort, vent}};
-    \node[cls=datagreen/datafill,minimum width=1.9cm] (i) at (8.1,2.35) {\clsname{integrators/}\clsbody{Euler, Verlet}};
-    \node[cls=memborder/memfill,abstract,minimum width=4cm] (r) at (4.6,0.95)
-      {\clsabstract{Renderer}\clsbody{drawCircle, drawLine : virtuelles pures}};
-    % scenes et app au-dessus
-    \node[cls=dummyorange/dummyfill,minimum width=3.2cm] (sc) at (2.4,4.35)
-      {\clsname{scenes/}\clsbody{13 scènes = 13 fonctions}};
-    \node[cls=ctrlred/ctrlfill,minimum width=3.2cm] (app) at (6.8,4.35)
-      {\clsname{app/main.cpp}\clsbody{boucle, clavier, souris}};
-    % render : boite noire
-    \node[blackbox,minimum width=3.0cm,minimum height=1.3cm] (sf) at (12.0,0.95)
-      {{\bfseries\small render/}\\[0.3ex]SFMLRender\\{\tiny boîte noire}};
-    \node[blackbox,minimum width=3.0cm] (lib) at (12.0,2.75) {SFML 2.6\\{\tiny FetchContent, statique}};
-    % liens
-    \draw[uses] (sc.south) -- (sc.south |- phys.north);
-    \draw[uses] (app.south) -- (app.south |- phys.north);
-    \draw[uses] (app.west) -- (sc.east);
-    \draw[inherit] (sf.west) -- node[above,font=\tiny,text=textgrey]{implémente} (r.east);
-    \draw[uses] (sf.north) -- (lib.south);
-    \draw[uses] (app.east) -| (sf.north east);
-    % la frontiere
-    \draw[phelmared,line width=1.2pt,dash pattern=on 5pt off 3pt] (9.95,-0.25) -- (9.95,5.0);
-    \node[font=\tiny\bfseries,text=phelmared,anchor=north,align=center] at (9.95,-0.3)
-      {aucun en-tête SFML à gauche};
-  \end{tikzpicture}
+  \schema{architecture}
   \astcue{
     \cue{\cuekey{physics} compile en \code{.a}, sans SFML : vérifié avec \code{grep}}
     \cue{le rendu SFML : on n'en parle pas, c'est une boîte noire}
@@ -51,56 +19,7 @@
 \begin{frame}{La hiérarchie des classes}
   \framesubtitle{une seule \code{Entity} partagée, grâce à l'héritage virtuel}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % racine
-    \node[cls=combislate/white,minimum width=2.6cm] (E) at (5.6,5.75)
-      {\clsname{Entity}\clsbody{id, name\astsep \code{static} current\_ids}};
-    % interfaces
-    \node[cls=memborder/memfill,abstract,minimum width=2.4cm] (D) at (3.0,3.95)
-      {\clsabstract{Drawable}\clsbody{couleurs\\\code{draw(Renderer\&) = 0}}};
-    \node[cls=memborder/memfill,abstract,minimum width=2.4cm] (F) at (8.2,3.95)
-      {\clsabstract{Force}\clsbody{\code{compute(const Particle\&) = 0}}};
-    % concret
-    \node[cls=datagreen/datafill,minimum width=2.2cm] (P) at (0.95,2.05)
-      {\clsname{Particle}\clsbody{pos, speed, mass\\forces : \code{Force\&}}};
-    \node[cls=datagreen/datafill,minimum width=2.2cm] (S) at (5.6,2.05)
-      {\clsname{Spring}\clsbody{$L_0$, $k$, $\rho$\\2 \code{Particle*}}};
-    \node[cls=datagreen/datafill] (G) at (7.6,2.05) {\clsleaf{Gravity}\clsbody{$m\vec g$}};
-    \node[cls=datagreen/datafill] (Dr) at (8.75,2.05) {\clsleaf{Drag}\clsbody{$-b\vec v$}};
-    \node[cls=datagreen/datafill] (Wi) at (9.95,2.05) {\clsleaf{Wind}\clsbody{lambda $w(t)$}};
-    % integrateurs
-    \node[cls=memborder/memfill,abstract,minimum width=2.4cm] (I) at (12.9,3.95)
-      {\clsabstract{Integrator}\clsbody{\code{step(particles, dt) = 0}}};
-    \node[cls=datagreen/datafill] (Eu) at (12.15,2.05) {\clsleaf{Euler}\clsbody{semi-implicite}};
-    \node[cls=datagreen/datafill] (Ve) at (13.65,2.05) {\clsleaf{Verlet}\clsbody{garde $x_{n-1}$}};
-    % monde
-    \node[cls=ctrlred/ctrlfill,minimum width=3.4cm] (W) at (5.6,0.2)
-      {\clsname{World}\clsbody{copie interdite : \code{= delete}}};
-    % heritages virtuels (le diamant)
-    \draw[vinherit] (P.north) |- (E.west);
-    \draw[vinherit,-] (D.north) -- (D.north |- E.west);
-    \draw[vinherit] (F.north) |- (E.east);
-    \draw[inherit] ([xshift=-5mm]S.north) |- (D.east);
-    \draw[inherit] ([xshift=5mm]S.north) |- (F.west);
-    \node[font=\tiny\bfseries,text=phelmared] at (5.6,3.95) {diamant};
-    % heritages simples
-    \draw[inherit] (P.east) -| ([xshift=-3mm]D.south);
-    \draw[inherit] (G.north) -- (G.north |- F.south);
-    \draw[inherit] (Dr.north) -- (Dr.north |- F.south);
-    \draw[inherit] (Wi.north) |- (F.east);
-    \draw[inherit] (Eu.north) -- (Eu.north |- I.south);
-    \draw[inherit] (Ve.north) -- (Ve.north |- I.south);
-    % possession
-    \draw[owns] (W.west) -| node[pos=0.8,left,font=\tiny,text=textgrey,align=right]{\code{deque}\\\code{<Particle>}} (P.south);
-    \draw[owns] (W.north) -- node[right,font=\tiny,text=textgrey]{\code{unique\_ptr<Spring>}} (S.south);
-    \draw[owns] (W.east) -- node[above,pos=0.45,font=\tiny,text=textgrey]{\code{unique\_ptr<Integrator>}} (10.95,0.2) |- (I.west);
-    % legende
-    \begin{scope}[shift={(11.6,0.5)},font=\tiny,text=textgrey]
-      \draw[vinherit] (0,0.45) -- (0.6,0.45); \node[anchor=west] at (0.7,0.45) {héritage virtuel};
-      \draw[inherit] (0,0.1) -- (0.6,0.1); \node[anchor=west] at (0.7,0.1) {héritage};
-      \draw[owns] (0,-0.25) -- (0.6,-0.25); \node[anchor=west] at (0.7,-0.25) {possède};
-    \end{scope}
-  \end{tikzpicture}
+  \schema{hierarchie}
   \astcue{
     \cue{\cuekey{Spring} est à la fois une force et un dessin}
     \cue{sans \code{virtual} : deux \code{Entity}, deux identifiants}

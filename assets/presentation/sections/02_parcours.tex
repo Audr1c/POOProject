@@ -9,44 +9,7 @@
 \begin{frame}{Le parcours d'un pas}
   \framesubtitle{huit étapes, de la scène à la souris}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % une fois, au chargement
-    \node[draw=floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm,
-      fill=floorfill,minimum width=3.3cm,minimum height=5.2cm] (once) at (1.65,2.75) {};
-    \node[fill=white,draw=combislate,line width=0.6pt,font=\tiny\bfseries,
-      inner xsep=1.5mm,inner ysep=0.8mm] at (once.south) {AU CHARGEMENT};
-    \node[cls=dummyorange/dummyfill,minimum width=2.6cm] (s1) at (1.65,4.55)
-      {\astpill{1}\enspace\clsname{Scène}\clsbody{une fonction}};
-    \node[cls=dummyorange/dummyfill,minimum width=2.6cm] (s2) at (1.65,2.95)
-      {\astpill{2}\enspace\clsname{Particules}\clsbody{constructeurs}};
-    \node[cls=ctrlred/ctrlfill,minimum width=2.6cm] (s3) at (1.65,1.35)
-      {\astpill{3}\enspace\clsname{World}\clsbody{possède tout}};
-    \draw[flow] (s1) -- (s2);
-    \draw[flow] (s2) -- (s3);
-    % la boucle de physique
-    \node[draw=floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm,
-      fill=floorfill,minimum width=7.6cm,minimum height=2.6cm] (loop) at (7.75,3.0) {};
-    \node[fill=white,draw=combislate,line width=0.6pt,font=\tiny\bfseries,
-      inner xsep=1.5mm,inner ysep=0.8mm] at (loop.south) {TANT QUE ACC $\geq$ DT \astsep{} 2 FOIS PAR IMAGE};
-    \node[cls=memborder/memfill,minimum width=2.1cm,minimum height=1.2cm] (s4) at (5.3,3.1)
-      {\astpill{4}\\[0.3ex]\clsname{Forces}\clsbody{appels virtuels}};
-    \node[cls=memborder/memfill,minimum width=2.1cm,minimum height=1.2cm] (s5) at (7.75,3.1)
-      {\astpill{5}\\[0.3ex]\clsname{Intégration}\clsbody{Euler ou Verlet}};
-    \node[cls=memborder/memfill,minimum width=2.1cm,minimum height=1.2cm] (s6) at (10.2,3.1)
-      {\astpill{6}\\[0.3ex]\clsname{Contraintes}\clsbody{bords, rebond}};
-    \draw[flow] (s4) -- (s5);
-    \draw[flow] (s5) -- (s6);
-    \draw[flow,rounded corners=2mm] (s6.north) -- ++(0,0.32) -| node[pos=0.25,below,font=\tiny,text=textgrey]{dt = 1/120\,s} (s4.north);
-    \draw[flow] (s3.east) -- ++(0.45,0) |- (loop.west);
-    % une fois par image
-    \node[cls=datagreen/datafill,minimum width=2.3cm,minimum height=1.2cm] (s7) at (13.2,3.1)
-      {\astpill{7}\\[0.3ex]\clsname{Dessin}\clsbody{diamant}};
-    \draw[flow] (loop.east) -- (s7);
-    \node[cls=sinkpurple/sinkfill,minimum width=2.3cm,minimum height=1.0cm] (s8) at (13.2,0.95)
-      {\astpill{8}\enspace\clsname{Souris}\clsbody{\code{dynamic\_cast}}};
-    \draw[flow,sinkpurple] (s8.west) -| node[pos=0.3,below,font=\tiny,text=textgrey]{déplace une particule} (10.95,1.7);
-    \node[font=\tiny,text=textgrey] at (13.2,4.25) {60 images/s};
-  \end{tikzpicture}
+  \schema{parcours}
   \astcue{
     \cue{la \cuekey{carte} de toute la partie : on la suit étape par étape}
     \cue{1 à 3 : une seule fois \astsep{} 4 à 6 : deux fois par image \astsep{} 7 : une fois par image}
@@ -59,40 +22,7 @@
 \begin{frame}{Une scène est une fonction}
   \framesubtitle{\code{std::function}, lambdas et un \code{template}}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % la description
-    \node[cls=dummyorange/dummyfill,text width=3.9cm,align=left] (sc) at (2.2,3.95)
-      {\clsname{Scene}\\[0.3ex]
-       {\scriptsize name, description\\size (en mètres)\\
-        \textbf{build} : \code{std::function}\\\hspace*{3mm}\code{<void(SceneInstance\&)>}}};
-    % la liste des scenes
-    \node[cls=dummyorange/white,minimum width=2.4cm,font=\tiny,text=floorgrey] at (2.19,1.61) {\phantom{x}};
-    \node[cls=dummyorange/white,minimum width=2.4cm,font=\tiny,text=floorgrey] at (1.97,1.43) {\phantom{x}};
-    \node[cls=dummyorange/white,minimum width=2.4cm,font=\tiny] at (1.75,1.25) {Pendule, Corde, Tissu\dots};
-    \node[font=\tiny,text=textgrey,anchor=north] at (2.0,0.65) {\code{allScenes()} : 13 scènes};
-    \draw[uses] (sc.south) -- (2.0,1.88);
-    % la scene en cours
-    \node[draw=floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm,
-      fill=floorfill,minimum width=5.4cm,minimum height=4.5cm] (inst) at (11.1,2.75) {};
-    \node[fill=white,draw=combislate,line width=0.6pt,font=\tiny\bfseries,
-      inner xsep=1.5mm,inner ysep=0.8mm] at (inst.south) {SCENEINSTANCE};
-    % noeuds ecrits un par un, plus lisible qu une boucle ici
-    \tikzset{mem/.style={minimum width=3.9cm,font=\scriptsize}}
-    \node[cls=memborder/memfill,mem] at (10.6,4.35) {\code{extra\_forces} : \code{unique\_ptr<Force>}};
-    \node[cls=memborder/memfill,mem] at (10.6,3.6) {\code{gravity} : \code{Gravity}};
-    \node[cls=memborder/memfill,mem] at (10.6,2.85) {\code{drag} : \code{Drag}};
-    \node[cls=combislate/white,mem] at (10.6,2.1) {\code{time} : \code{float}};
-    \node[cls=ctrlred/ctrlfill,mem] at (10.6,1.2) {\code{world} : \code{World}};
-    \draw[-{Latex[length=1.6mm]},line width=1pt,phelmared] (13.05,1.0) -- node[right,font=\tiny,text=phelmared,align=left,pos=0.5]{ordre de\\destruction} (13.05,4.5);
-    % instantiate
-    \draw[flow] (sc.east) -- node[above,font=\scriptsize]{\code{instantiate(scene, Verlet)}}
-      node[below,font=\tiny,text=textgrey]{appelle \code{build}} (inst.west |- sc.east);
-    % le template
-    \node[astcallout,font=\scriptsize,align=center] (tpl) at (5.9,2.25)
-      {\code{s.addForce<Wind>(lambda, s.time, 0.035f)}\\[0.3ex]
-       {\tiny\color{textgrey}template variadique : construit n'importe quelle force}};
-    \draw[-{Latex[length=1.6mm]},phelmared,line width=0.8pt] (tpl.north) to[out=90,in=180] (8.6,4.35);
-  \end{tikzpicture}
+  \schema[5.3cm]{scene}
   \fil{1}
   \astcue{
     \cue{une scène = un nom, une taille et une \cuekey{fonction} qui remplit le monde}
@@ -107,34 +37,7 @@
 \begin{frame}{Créer une particule}
   \framesubtitle{constructeurs délégués et liste d'initialisation}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % la chaine de constructeurs
-    \node[cls=combislate/white,font=\scriptsize] (c1) at (2.3,4.6) {\code{Particle(x, y, m, e, g, d)}};
-    \node[cls=combislate/white,font=\scriptsize] (c2) at (2.3,3.55) {\code{Particle(pos, m, e, g, d)}};
-    \node[cls=datagreen/datafill,font=\scriptsize] (c3) at (2.3,2.5) {\code{Particle(pos, m, \textbf{r}, e, g, d)}};
-    \draw[flow] (c1) -- node[right,font=\tiny,text=textgrey]{délègue} (c2);
-    \draw[flow] (c2) -- node[right,font=\tiny,text=textgrey]{délègue} (c3);
-    % la liste d'initialisation
-    \node[font=\tiny\bfseries,text=inpnavy,anchor=west] at (2.5,1.45) {LISTE D'INITIALISATION};
-    \foreach \x/\t/\c/\f in {0.85/{Entity(\dots)}/combislate/white,
-                             2.75/{Drawable()}/memborder/memfill,
-                             4.45/{pos(pos)}/datagreen/datafill,
-                             6.05/{mass(m)}/datagreen/datafill,
-                             7.95/{forces(\{g, d\})}/datagreen/datafill} {
-      \node[cls=\c/\f,font=\tiny,minimum height=0.55cm] at (\x,0.85) {\code{\t}};}
-    \node[cls=ctrlred/ctrlfill,font=\tiny,minimum height=0.55cm,line width=1.2pt] (rad) at (9.85,0.85) {\code{radius(r)}};
-    \draw[uses] (c3.south) -- (2.3,1.25);
-    \node[astcallout,font=\scriptsize,anchor=south] (rc) at (9.85,2.0)
-      {\code{const float radius}\\{\tiny\color{textgrey}ne s'écrit que dans la liste}};
-    \draw[-{Latex[length=1.6mm]},phelmared,line width=0.8pt] (rc.south) -- (rad.north);
-    % le compteur static
-    \node[cls=combislate/white,minimum width=3.2cm] (cnt) at (12.6,4.55)
-      {\clsname{Entity}\clsbody{\code{static int current\_ids}\\un seul compteur pour la classe}};
-    \foreach \k/\t/\c/\f in {0/{Particle}/datagreen/datafill,1/{Particle}/datagreen/datafill,2/{Spring}/memborder/memfill} {
-      \node[cls=\c/\f,font=\tiny,minimum width=1.85cm] (e\k) at (12.6,3.05-\k*0.68) {\t\enspace\textbf{id \k}};}
-    \draw[uses] (cnt.south) -- (e0.north);
-    \node[font=\tiny,text=textgrey,align=center] at (12.6,0.75) {chaque \code{Entity} prend\\le numéro suivant};
-  \end{tikzpicture}
+  \schema[5.3cm]{particules}
   \fil{2}
   \astcue{
     \cue{trois constructeurs, \cuekey{un seul fait le travail} : les autres délèguent}
@@ -148,40 +51,7 @@
 \begin{frame}{Le \code{World} possède tout}
   \framesubtitle{des adresses qui ne bougent jamais}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    \tikzset{cell/.style={draw=datagreen,fill=datafill,minimum width=0.62cm,minimum height=0.5cm,font=\tiny,inner sep=0},
-             oldcell/.style={draw=floorgrey,fill=asttrack,minimum width=0.62cm,minimum height=0.5cm,font=\tiny,text=floorgrey,inner sep=0},
-             spr/.style={decorate,decoration={zigzag,segment length=1.4mm,amplitude=0.7mm},line width=0.7pt,draw=combislate}}
-    % ------- vector : reallocation
-    \node[font=\scriptsize\bfseries,text=inpnavy,anchor=west] at (0,5.05) {\code{vector<Particle>}};
-    \foreach \k in {0,1,2} {\node[oldcell] (v\k) at (0.4+\k*0.62,4.2) {P\k};}
-    \foreach \k in {0,1,2,3} {\node[cell] (w\k) at (4.2+\k*0.62,4.2) {P\k};}
-    \draw[flow] (2.0,4.2) -- node[above,font=\tiny,text=textgrey]{\code{push\_back}} node[below,font=\tiny,text=textgrey]{réalloue} (3.75,4.2);
-    \draw[spr] (0.4,3.15) -- (1.5,3.15);
-    \draw[-{Latex[length=1.4mm]},phelmared,line width=0.8pt,dash pattern=on 2pt off 1pt] (1.5,3.15) -- (v1.south);
-    \node[text=phelmared,font=\large\bfseries] at (1.02,4.2) {$\times$};
-    \node[font=\tiny,text=phelmared,anchor=west] at (1.7,3.15) {pointeur pendant};
-    % ------- deque
-    \node[font=\scriptsize\bfseries,text=inpnavy,anchor=west] at (0,2.25) {\code{deque<Particle>}};
-    \foreach \k in {0,1,2} {\node[cell] (d\k) at (0.4+\k*0.62,1.4) {P\k};}
-    \foreach \k in {0,1,2} {\node[cell] (n\k) at (4.2+\k*0.62,1.4) {P\k};}
-    \node[cell,draw=phelmared,line width=1pt] (n3) at (4.2+3*0.62+0.25,1.4) {P3};
-    \draw[flow] (2.0,1.4) -- node[above,font=\tiny,text=textgrey]{\code{push\_back}} node[below,font=\tiny,text=textgrey]{nouveau bloc} (3.75,1.4);
-    \draw[spr] (4.2,0.35) -- (5.3,0.35);
-    \draw[-{Latex[length=1.4mm]},datagreen!60!black,line width=0.8pt] (5.3,0.35) -- (n1.south);
-    \node[font=\tiny,text=datagreen!50!black,anchor=west] at (5.5,0.35) {\faCheck{} toujours valide};
-    % ------- le World
-    \node[draw=floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt,rounded corners=3mm,
-      fill=floorfill,minimum width=5.6cm,minimum height=4.6cm] (W) at (11.6,2.75) {};
-    \node[fill=white,draw=ctrlred,line width=0.8pt,font=\tiny\bfseries,text=ctrlred,
-      inner xsep=1.5mm,inner ysep=0.8mm] at (W.south) {WORLD};
-    \node[cls=datagreen/datafill,minimum width=4.6cm,font=\scriptsize] at (11.6,4.45) {\code{deque<Particle> particles}};
-    \node[cls=memborder/memfill,minimum width=4.6cm,font=\scriptsize] at (11.6,3.65) {\code{vector<unique\_ptr<Spring>{}> springs}};
-    \node[cls=memborder/memfill,minimum width=4.6cm,font=\scriptsize] at (11.6,2.85) {\code{unique\_ptr<Integrator> integrator}};
-    \node[cls=ctrlred/ctrlfill,minimum width=4.6cm,font=\scriptsize,align=center] at (11.6,1.6)
-      {\code{World(const World\&) = delete}\\[0.2ex]{\tiny\color{textgrey}copier un monde casserait tous les liens}};
-    \node[font=\tiny,text=textgrey] at (11.6,0.75) {\code{unique\_ptr} : aucun \code{delete} à écrire};
-  \end{tikzpicture}
+  \schema[5.3cm]{world}
   \fil{3}
   \astcue{
     \cue{un ressort garde \cuekey{deux pointeurs} vers ses particules}
@@ -197,33 +67,7 @@
 \begin{frame}{Une particule somme ses forces}
   \framesubtitle{un seul appel, quatre comportements}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    \node[cls=datagreen/datafill,minimum width=2.4cm,minimum height=3.9cm] (P) at (1.3,2.6) {};
-    \node[font=\small\bfseries,anchor=north] at (P.north) {Particle};
-    \node[font=\tiny,text=textgrey,anchor=north] at ([yshift=-4.5mm]P.north) {\code{acting\_forces}};
-    \foreach \k/\t/\f/\c/\ff in {0/Gravity/{$m\,\vec g$}/memborder/memfill,
-                                 1/Drag/{$-b\,\vec v$}/memborder/memfill,
-                                 2/Spring/{$k(\ell-L_0)\,\hat d+\dots$}/memborder/memfill,
-                                 3/Spring/{$k(\ell-L_0)\,\hat d+\dots$}/memborder/memfill,
-                                 4/Wind/{$c\,(\vec w(t)-\vec v)$}/memborder/memfill} {
-      \node[draw=combislate,fill=white,font=\tiny,minimum width=1.9cm,minimum height=0.42cm,
-        inner sep=1pt] (r\k) at (1.3,3.45-\k*0.58) {\code{Force\&}};
-      \node[cls=\c/\ff,minimum width=1.7cm,font=\scriptsize\bfseries,minimum height=0.48cm,inner sep=0.8mm] (f\k) at (5.6,3.45-\k*0.58) {\t};
-      \node[font=\scriptsize,anchor=west] (v\k) at (6.6,3.45-\k*0.58) {\f};
-      \draw[-{Latex[length=1.4mm]},line width=0.6pt,combislate] (r\k.east) -- (f\k.west);
-    }
-    \node[font=\tiny,text=textgrey] at (3.65,4.0) {\code{f.compute(*this)}};
-    % somme
-    \node[circle,draw=inpnavy,fill=white,line width=1pt,font=\large,inner sep=1pt] (sum) at (10.7,2.29) {$\Sigma$};
-    \foreach \k in {0,...,4} {\draw[-{Latex[length=1.4mm]},line width=0.5pt,floorgrey] ($(v\k.east)+(0.05,0)$) -- (sum);}
-    \node[cls=ctrlred/ctrlfill,font=\small] (acc) at (13.2,2.29) {$\vec a = \dfrac{\sum \vec F}{m}$};
-    \draw[flow] (sum) -- (acc);
-    % message
-    \node[astcallout,align=center,font=\scriptsize] at (4.1,0.2)
-      {\code{compute} est \textbf{virtuelle pure} : le bon calcul est choisi à l'exécution};
-    \node[cls=datagreen/datafill,align=center,font=\scriptsize] at (11.5,0.2)
-      {ajouter une force = \textbf{une classe}\\{\tiny\color{textgrey}\code{Wind} ajoutée sans toucher à \code{World}}};
-  \end{tikzpicture}
+  \schema[5.3cm]{forces}
   \fil{4}
   \astcue{
     \cue{chaque particule tient une liste de \code{Force\&} : \cuekey{liaison dynamique}}
@@ -280,33 +124,7 @@ return direction * ((*@\textcolor{astblue}{k * (length - L0)}@*) + (*@\textcolor
 \begin{frame}{Changer d'intégrateur en direct}
   \framesubtitle{\code{enum class}, une fabrique et une interface}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % la chaine : touche -> enum -> fabrique -> unique_ptr -> World
-    \node[draw=combislate,fill=white,rounded corners=1mm,line width=1pt,font=\bfseries,minimum size=0.8cm] (key) at (0.5,4.4) {I};
-    \node[cls=dummyorange/dummyfill,font=\scriptsize] (en) at (3.3,4.4)
-      {\code{enum class IntegratorType}\\[-0.2ex]{\tiny\color{textgrey}\code{Euler}, \code{Verlet}}};
-    \node[cls=dummyorange/dummyfill,font=\scriptsize] (mk) at (7.0,4.4)
-      {\code{makeIntegrator(type)}\\[-0.2ex]{\tiny\color{phelmared}le seul \code{switch} du projet}};
-    \node[cls=ctrlred/ctrlfill,font=\scriptsize] (set) at (11.3,4.4)
-      {\code{world.setIntegrator(...)}\\[-0.2ex]{\tiny\color{textgrey}reçoit un \code{unique\_ptr<Integrator>}}};
-    \draw[flow] (key) -- (en);
-    \draw[flow] (en) -- (mk);
-    \draw[flow] (mk) -- (set);
-    % World appelle step
-    \node[cls=ctrlred/ctrlfill,font=\scriptsize] (call) at (3.0,1.65)
-      {\code{integrator->step(particles, dt)}\\[-0.2ex]{\tiny\color{textgrey}\code{World} ignore le type réel}};
-    \draw[uses] (set.south) |- ($(call.north)+(0,0.6)$) -- (call.north);
-    \node[cls=memborder/memfill,abstract,font=\scriptsize] (I) at (7.3,1.65) {\clsabstract{Integrator}\\[-0.2ex]{\tiny\code{step(...) = 0}}};
-    \draw[flow] (call) -- (I);
-    \node[cls=datagreen/datafill,text width=3.4cm,align=center] (eu) at (11.6,2.45)
-      {\clsleaf{Euler semi-implicite}\\[0.3ex]{\scriptsize $\vec v \mathrel{+}= \vec a\,dt$ \quad $\vec x \mathrel{+}= \vec v\,dt$}};
-    \node[cls=datagreen/datafill,text width=3.4cm,align=center] (ve) at (11.6,0.85)
-      {\clsleaf{Verlet}\\[0.3ex]{\scriptsize $\vec x_{n+1} = 2\vec x_n - \vec x_{n-1} + \vec a\,dt^2$}};
-    \draw[inherit] (eu.west) -| ([xshift=-3mm]I.north east);
-    \draw[inherit] (ve.west) -| ([xshift=-3mm]I.south east);
-    \node[font=\tiny,text=textgrey,align=left,anchor=north west] at (5.6,0.65)
-      {les deux tiennent \code{previous\_pos} à jour :\\on bascule sans saut};
-  \end{tikzpicture}
+  \schema[5.3cm]{integration}
   \fil{5}
   \astcue{
     \cue{\code{enum class} : un type à part, pas un \code{int} déguisé}
@@ -357,30 +175,14 @@ return direction * ((*@\textcolor{astblue}{k * (length - L0)}@*) + (*@\textcolor
 % ============================================================ 6. contraintes
 \begin{frame}{Les contraintes}
   \framesubtitle{bords du monde, rebond et points épinglés}
-  \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    % la boite et le rebond
-    \draw[floorgrey,line width=0.8pt,dash pattern=on 3pt off 2pt] (0,4.6) -- (0,0.6) -- (6.0,0.6) -- (6.0,4.6);
-    \node[font=\tiny,text=textgrey,anchor=west] at (6.05,0.6) {$y_{min}$};
-    \draw[-{Latex[length=1.8mm]},line width=1pt,inpnavy] (0.8,4.1) -- (2.75,1.05);
-    \node[circle,fill=asttrack,draw=floorgrey,dash pattern=on 1.5pt off 1pt,minimum size=0.5cm,inner sep=0] (ghost) at (3.0,0.32) {};
-    \node[circle,fill=timaorange,draw=timaorange!62!black,line width=0.7pt,minimum size=0.5cm,inner sep=0] (ball) at (3.0,0.85) {};
-    \draw[-{Latex[length=1.4mm]},phelmared,line width=0.7pt] (ghost.east) to[bend right=50] (ball.east);
-    \node[font=\tiny,text=phelmared,anchor=east] at (2.65,0.3) {replacée à $y_{min}+r$};
-    \draw[-{Latex[length=1.8mm]},line width=1pt,datagreen!60!black] (3.25,1.05) -- (4.6,2.75);
-    \node[astcallout,font=\scriptsize,anchor=west] at (4.2,3.5) {$v_y \leftarrow -e\,v_y$};
-    \node[font=\tiny,text=textgrey,align=center] at (3.0,-0.3) {$e$ = \code{bounciness} : de 0 (bloc) à 1 (balle parfaite)};
-    % epingle et Verlet
-    \node[cls=combislate/white,text width=2.9cm,align=left] at (8.6,3.6)
-      {{\bfseries\footnotesize Particule épinglée}\\[0.3ex]
-       {\scriptsize \code{moovable = false}\\ignorée par les forces\\et les intégrateurs}};
-    \node[font=\tiny,text=textgrey] at (8.6,2.5) {clic droit : épingler / libérer};
-    \node[cls=memborder/memfill,text width=2.9cm,align=left] at (8.6,1.3)
-      {{\bfseries\footnotesize Verlet et rebond}\\[0.3ex]
-       {\scriptsize on recale \code{previous\_pos},\\sinon la vitesse repart}};
-    % capture
-    \node at (12.65,2.4) {\scenecard{figures/scenes/scene_10.png}{Pluie de balles}{2.0cm}};
-  \end{tikzpicture}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.70\textwidth}
+      \centering\schema[5.3cm]{contraintes}
+    \end{column}
+    \begin{column}{0.28\textwidth}
+      \centering\scenecard{figures/scenes/scene_10.png}{Pluie de balles}{2.2cm}
+    \end{column}
+  \end{columns}
   \fil{6}
   \astcue{
     \cue{le monde est une \cuekey{boîte} : 4 bords au lieu d'un simple sol}
@@ -394,37 +196,7 @@ return direction * ((*@\textcolor{astblue}{k * (length - L0)}@*) + (*@\textcolor
 \begin{frame}{Dessiner : le diamant}
   \framesubtitle{\code{Spring} est une \code{Force} et un \code{Drawable}}
   \centering
-  \begin{tikzpicture}[x=1cm,y=1cm]
-    \def\bs{0.052}% cm par octet
-    \tikzset{seg/.style={draw=white,line width=0.8pt,minimum height=0.62cm,inner sep=0,font=\tiny,anchor=west}}
-    % sans virtual
-    \node[font=\scriptsize\bfseries,text=inpnavy,anchor=west] at (0,4.75) {sans \code{virtual}};
-    \node[font=\scriptsize\bfseries,text=phelmared,anchor=east] at (7.5,4.75) {144 octets};
-    \node[seg,fill=ctrlfill,draw=ctrlred,text=ctrlred,minimum width=48*\bs cm] at (0,4.15) {\textbf{Entity} id 4};
-    \node[seg,fill=ctrlfill,draw=ctrlred,text=ctrlred,minimum width=48*\bs cm] at (48*\bs,4.15) {\textbf{Entity} id 5};
-    \node[seg,fill=memfill,draw=memborder,minimum width=24*\bs cm] at (96*\bs,4.15) {Drawable};
-    \node[seg,fill=datafill,draw=datagreen,minimum width=24*\bs cm] at (120*\bs,4.15) {Spring};
-    \node[font=\tiny,text=phelmared,anchor=north west] at (0,3.75) {deux \code{Entity} : deux identifiants, \code{getId()} ambigu};
-    % avec virtual
-    \node[font=\scriptsize\bfseries,text=inpnavy,anchor=west] at (0,2.75) {avec \code{virtual}};
-    \node[font=\scriptsize\bfseries,text=datagreen!50!black,anchor=east] at (7.5,2.75) {112 octets};
-    \node[seg,fill=asttrack,draw=floorgrey,minimum width=16*\bs cm] at (0,2.15) {vptr};
-    \node[seg,fill=memfill,draw=memborder,minimum width=24*\bs cm] at (16*\bs,2.15) {Drawable};
-    \node[seg,fill=datafill,draw=datagreen,minimum width=24*\bs cm] at (40*\bs,2.15) {Spring};
-    \node[seg,fill=white,draw=combislate,line width=1.2pt,minimum width=48*\bs cm] at (64*\bs,2.15) {\textbf{Entity} partagée};
-    \node[font=\tiny,text=datagreen!50!black,anchor=north west] at (0,1.75) {une seule \code{Entity}, et plus léger : \code{Entity} contient une \code{string}};
-    \node[font=\tiny,text=textgrey,anchor=west] at (0,0.95) {\code{Particle} : 152 octets avec \code{virtual}, 192 sans};
-    % le dessin
-    \node[cls=ctrlred/ctrlfill,font=\scriptsize] (wd) at (11.3,4.5) {\code{World::draw(renderer)}};
-    \node[cls=memborder/memfill,abstract,font=\scriptsize] (dd) at (11.3,3.35) {\code{d.draw(renderer)}\\[-0.2ex]{\tiny\color{textgrey}pour chaque \code{Drawable}}};
-    \node[cls=datagreen/datafill,font=\scriptsize] (dl) at (11.3,2.2) {\code{renderer.drawLine(a, b, couleur)}\\[-0.2ex]{\tiny\color{textgrey}rouge : étiré \astsep{} bleu : comprimé}};
-    \node[cls=memborder/memfill,abstract,font=\scriptsize] (rr) at (10.2,0.85) {\clsabstract{Renderer}};
-    \node[blackbox,font=\scriptsize] (sf) at (12.7,0.85) {SFML};
-    \draw[flow] (wd) -- (dd);
-    \draw[flow] (dd) -- (dl);
-    \draw[flow] (dl.south) -- ++(0,-0.3) -| (rr.north);
-    \draw[inherit] (sf) -- (rr);
-  \end{tikzpicture}
+  \schema[5.3cm]{diamant}
   \fil{7}
   \astcue{
     \cue{\code{Force} et \code{Drawable} héritent \cuekey{virtuellement} d'\code{Entity}}
@@ -460,20 +232,7 @@ Particle *World::pickParticle(const Vec2 &at,
     \end{column}
     \begin{column}{0.40\textwidth}
       \centering
-      \begin{tikzpicture}[x=1cm,y=1cm]
-        \node[font=\scriptsize\bfseries,text=inpnavy] at (2.4,3.3) {\code{entities()} : des \code{Entity*}};
-        \foreach \k/\t/\cc/\ff in {0/P/datagreen/datafill,1/S/memborder/memfill,2/P/datagreen/datafill,
-                                   3/S/memborder/memfill,4/P/datagreen/datafill} {
-          \node[cls=\cc/\ff,minimum size=0.75cm,font=\small\bfseries] (e\k) at (\k*0.95+0.5,2.4) {\t};}
-        \foreach \k in {0,2,4} {
-          \draw[flow,datagreen!70!black] (e\k.south) -- ++(0,-0.75) node[below,font=\tiny,text=datagreen!50!black]{\code{Particle*}};
-        }
-        \foreach \k in {1,3} {
-          \draw[flow,floorgrey] (e\k.south) -- ++(0,-0.75) node[below,font=\tiny,text=floorgrey]{\code{nullptr}};
-        }
-        \node[astcallout,align=center,font=\scriptsize] at (2.4,0.1)
-          {la plus proche du clic\\est attrapée};
-      \end{tikzpicture}
+      \schema{souris}
     \end{column}
   \end{columns}
   \fil{8}

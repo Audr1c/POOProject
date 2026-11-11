@@ -4,6 +4,7 @@
 #   make fiche      -> build/main-fiche.pdf  (fiche d'orateur, 4 par A4)
 #   make captures   -> regenere figures/scenes/*.png depuis le programme
 #   make energie    -> regenere figures/data/energie_*.csv (Euler contre Verlet)
+#   make schemas    -> exporte schemas/*.drawio en figures/schemas/*.pdf
 #   make clean
 #
 # Les captures utilisent la cible CMake << capture >> (app/capture.cpp) : elle
@@ -14,13 +15,19 @@
 BUILD_DIR = build
 LATEXMK   = latexmk -pdf -synctex=1 -interaction=nonstopmode -file-line-error -outdir=$(BUILD_DIR)
 
+# draw.io en ligne de commande. Sous Windows, si << drawio >> n'est pas dans le
+# PATH : make schemas DRAWIO="'C:/Program Files/draw.io/draw.io.exe'"
+# Sous Linux sans ecran : make schemas DRAWIO="xvfb-run -a drawio --no-sandbox"
+DRAWIO   ?= drawio
+SCHEMAS   = $(wildcard schemas/*.drawio)
+
 ROOT      = ../..
 CMAKE_DIR = $(ROOT)/build
 RUN      ?=
 MAGICK   ?= magick
 RAW_DIR   = $(BUILD_DIR)/captures
 
-.PHONY: all pdf fiche captures energie clean
+.PHONY: all pdf fiche captures energie schemas clean
 
 all: pdf
 
@@ -37,6 +44,13 @@ captures:
 	for f in $(RAW_DIR)/*.png; do \
 	  $(MAGICK) "$$f" -filter Lanczos -resize 50% "figures/scenes/$$(basename "$$f")"; \
 	done
+
+# Un PDF par schema, rogne au contenu (vectoriel, texte selectionnable)
+schemas: $(SCHEMAS:schemas/%.drawio=figures/schemas/%.pdf)
+
+figures/schemas/%.pdf: schemas/%.drawio
+	@mkdir -p figures/schemas
+	$(DRAWIO) -x -f pdf --crop -b 4 -o $@ $<
 
 energie:
 	cmake --build $(CMAKE_DIR) --target energie

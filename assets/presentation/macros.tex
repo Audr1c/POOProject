@@ -160,3 +160,15 @@
       }
     \end{scope}
   \end{tikzpicture}}
+
+% ---------------------------------------------------------------------------
+% Schemas draw.io : sources dans schemas/*.drawio, PDF exportes par
+% << make schemas >> dans figures/schemas/. Ils sont dessines a l'echelle 2 :
+% inclus a 0,5, leurs textes ont la taille des textes des diapositives
+% (21 px = \scriptsize). Ils ne sont reduits que s'ils depassent la place.
+%   \schema{hierarchie}          hauteur max : toute la zone utile
+%   \schema[5.3cm]{forces}       hauteur max donnee (diapos avec fil rouge)
+% ---------------------------------------------------------------------------
+\NewDocumentCommand{\schema}{O{\astdiagheight} m}{%
+  \adjustbox{scale=0.5,max width=\linewidth,max totalheight=#1}%
+    {\includegraphics{figures/schemas/#2.pdf}}}
