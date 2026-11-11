@@ -8,6 +8,22 @@
 \usetikzlibrary{calc,positioning,arrows.meta,fit,backgrounds,patterns,
   decorations.pathreplacing,decorations.pathmorphing,shapes.geometric,babel}
 
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{dateplot}
+\pgfplotsset{
+  astplot/.style={
+    width=6.6cm,height=4.2cm,scale only axis=false,
+    axis lines=left,axis line style={combislate,line width=0.6pt},
+    tick style={combislate},tick label style={font=\tiny,text=textgrey},
+    label style={font=\scriptsize,text=inpnavy},
+    title style={font=\scriptsize\bfseries,text=inpnavy},
+    grid=major,grid style={asttrack,line width=0.3pt},
+    legend style={font=\tiny,draw=none,fill=white,fill opacity=0.85,text opacity=1},
+    /pgf/number format/use comma,
+    every axis plot/.append style={line width=1pt,mark=none},
+  },
+}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{fontawesome5}

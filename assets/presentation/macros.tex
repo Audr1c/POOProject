@@ -135,3 +135,28 @@
 \else
   \newcommand{\astcue}[1]{}
 \fi
+
+% ---------------------------------------------------------------------------
+% Fil rouge de la partie 2 : les huit etapes d'un pas de simulation, en bas
+% de la diapositive. L'etape courante est pleine, les suivantes estompees.
+%   \fil{4}   a placer dans la frame (dessin en surimpression)
+% ---------------------------------------------------------------------------
+\newcommand{\filsteps}{Scène,Particules,World,Forces,Intégration,Contraintes,Dessin,Souris}
+\newcommand{\fil}[1]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \begin{scope}[shift={($(current page.south)+(0,\astfootheight+1.6mm)$)}]
+      \foreach \lab [count=\k] in \filsteps {
+        \pgfmathsetmacro{\fx}{(\k-4.5)*1.72}
+        \ifnum\k<#1\relax
+          \node[draw=inpnavy,fill=white,text=inpnavy,rounded corners=1pt,font=\tiny,
+            minimum width=1.55cm,inner ysep=1pt] at (\fx,0) {\k\enspace\lab};
+        \else\ifnum\k=#1\relax
+          \node[draw=phelmared,fill=phelmared,text=white,rounded corners=1pt,font=\tiny\bfseries,
+            minimum width=1.55cm,inner ysep=1pt] at (\fx,0) {\k\enspace\lab};
+        \else
+          \node[draw=astmutedbadge,fill=white,text=floorgrey,rounded corners=1pt,font=\tiny,
+            minimum width=1.55cm,inner ysep=1pt] at (\fx,0) {\k\enspace\lab};
+        \fi\fi
+      }
+    \end{scope}
+  \end{tikzpicture}}

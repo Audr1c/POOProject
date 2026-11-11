@@ -54,3 +54,14 @@ Test sans affichage (chaque scene 10 s avec les deux integrateurs) :
 cmake --build build --target scenes_test
 ./build/scenes_test
 ```
+
+### Presentation
+
+Le diaporama (beamer) est dans `assets/presentation/` :
+```sh
+cd assets/presentation
+make            # build/main.pdf
+make fiche      # build/main-fiche.pdf, fiche d'orateur a imprimer
+make captures   # regenere les captures des scenes (cible CMake capture)
+make energie    # regenere les courbes d'energie Euler / Verlet (cible energie)
+```

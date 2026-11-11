@@ -1,0 +1,144 @@
+% !TEX root = ../main.tex
+% Partie 3 : ce que le moteur produit (extension, scenes), recapitulatif des
+% notions et bilan.
+
+\section{Résultats}
+
+% ============================================================ extension : vent
+\begin{frame}[fragile]{L'extension : un vent qui varie}
+  \framesubtitle{une force dont l'intensité est une lambda du temps}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.45\textwidth}
+      \centering
+      \scenecard{figures/scenes/scene_07.png}{Rideau au vent}{3.9cm}
+    \end{column}
+    \begin{column}{0.53\textwidth}
+      \centering\shorthandoff{;:}%
+      \begin{tikzpicture}
+        \begin{axis}[astplot,width=7.4cm,height=3.2cm,xlabel={$t$ (s)},ylabel={$w_x$ (m/s)},
+            xmin=0,xmax=20,ymin=-2,ymax=14,ytick={0,6,12},samples=300,domain=0:20]
+          \addplot[violet!70!black,fill=sinkfill,fill opacity=0.5] {6+5*sin(deg(0.7*x))+2*sin(deg(2.3*x+1))} \closedcycle;
+          \addplot[sinkpurple,line width=1.2pt] {6+5*sin(deg(0.7*x))+2*sin(deg(2.3*x+1))};
+        \end{axis}
+      \end{tikzpicture}
+\begin{lstlisting}[basicstyle=\ttfamily\tiny]
+Wind &wind = s.addForce<Wind>(
+    [](float t) {   // rafales : deux sinus
+      float gust = 6 + 5*sin(0.7f*t) + 2*sin(2.3f*t + 1);
+      return Vec2(gust, 0.8f * sin(1.3f*t));
+    },
+    s.time, 0.035f);           // F = c (w(t) - v)
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \centering
+  \begin{tikzpicture}
+    \node[cls=datagreen/datafill,font=\scriptsize]
+      {une classe \code{Wind} + une lambda \astsep{} \code{World}, \code{Integrator} et les autres forces \textbf{inchangés}};
+  \end{tikzpicture}
+  \astcue{
+    \cue{extension du jalon 4 : \cuekey{vent variable}}
+    \cue{\code{std::function<Vec2(float)>} : n'importe quel profil de vent}
+    \cue{la force lit l'horloge de la scène, elle ne modifie jamais \code{World}}
+    \cuenext{toutes les scènes}
+  }
+\end{frame}
+
+% ============================================================ galerie
+\begin{frame}{Treize scènes, un seul moteur}
+  \framesubtitle{une scène = une fonction qui remplit un \code{World}}
+  \centering
+  \setlength{\tabcolsep}{1.5mm}
+  \begin{tabular}{ccc}
+    \scenecard{figures/scenes/scene_04.png}{Pont de corde}{2.6cm} &
+    \scenecard{figures/scenes/scene_12.png}{Toile d'araignée}{2.6cm} &
+    \scenecard{figures/scenes/scene_09.png}{Oscillateurs}{2.6cm} \\[3mm]
+    \scenecard{figures/scenes/scene_06.png}{Blob}{2.6cm} &
+    \scenecard{figures/scenes/scene_08.png}{Gelée}{2.6cm} &
+    \scenecard{figures/scenes/scene_11.png}{Apesanteur}{2.6cm} \\
+  \end{tabular}
+  \astcue{
+    \cue{ajouter une scène = écrire une fonction, \cuekey{sans toucher au moteur}}
+    \cue{oscillateurs : 6 raideurs, de 5 à 160 N/m, même masse}
+    \cue{apesanteur : $g = 0$, un anneau qui tourne sur lui-même}
+    \cuenext{démo en direct si le temps le permet}
+  }
+\end{frame}
+
+% ============================================================ recapitulatif
+\begin{frame}{Les notions du cours, où les trouver}
+  \framesubtitle{du plus simple au plus avancé}
+  \centering
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \foreach \i/\c/\f/\t/\b/\file in {
+      0/datagreen/datafill/Vec2/{opérateurs\\passage par \code{const\&}\\méthodes \code{const}}/vec2.hpp,
+      1/timagreen/timagreen!12/Constructeurs/{délégués\\liste d'initialisation\\\code{const}, \code{static}}/particles.cpp,
+      2/memborder/memfill/Polymorphisme/{\code{virtual}, \code{override}\\\code{enum class}\\fabrique}/force.hpp,
+      3/sinkpurple/sinkfill/Mémoire/{\code{deque}\\\code{unique\_ptr}\\copie \code{= delete}}/world.hpp,
+      4/ctrlred/ctrlfill/{Héritage\\multiple}/{diamant virtuel\\\code{dynamic\_cast}\\lambdas, template}/springs.hpp}
+    {
+      \node[cls=\c/\f,anchor=south west,minimum width=2.75cm,minimum height=2.3cm,
+        text width=2.5cm,align=left,inner sep=1.3mm] (st\i) at (\i*2.95,\i*0.85)
+        {{\bfseries\footnotesize\t}\\[0.8ex]{\scriptsize\b}};
+      \node[astnum] at (st\i.north west) {\the\numexpr\i+1\relax};
+      \node[anchor=south east,inner sep=0.6mm] at (st\i.north east) {\filechip{\file}};
+    }
+    \draw[-{Latex[length=2.4mm]},line width=1.4pt,phelmared,rounded corners=1mm]
+      (0,-0.15) -- (2.85,-0.15) -- (2.85,0.7) -- (5.8,0.7) -- (5.8,1.55) -- (8.75,1.55)
+      -- (8.75,2.4) -- (11.7,2.4) -- (11.7,3.25) -- (14.65,3.25) -- (14.65,4.6);
+    \node[anchor=north east,font=\tiny\bfseries,text=phelmared,align=right] at (14.55,0.5)
+      {plus abstrait,\\plus puissant};
+  \end{tikzpicture}
+  \astcue{
+    \cue{le tableau du sujet en une image : \cuekey{chaque notion a son fichier}}
+    \cuenext{bilan}
+  }
+\end{frame}
+
+% ============================================================ bilan
+\begin{frame}{Bilan}
+  \framesubtitle{ce que le moteur fait, et ses limites}
+  \centering
+  \begin{tikzpicture}[x=1cm,y=1cm]
+    \node[cls=datagreen/datafill,text width=6.3cm,align=left,minimum height=4.6cm,anchor=north] (ok) at (3.5,5.0)
+      {{\bfseries\small\color{datagreen!50!black}\faCheck\enspace Ce qui marche}\\[1.2ex]
+       {\scriptsize
+        \textbf{13 scènes}, du pendule au tissu de 400 particules\\[0.7ex]
+        Euler ou Verlet, \textbf{changés en direct}\\[0.7ex]
+        \code{physics} compilée en \code{.a}, \textbf{sans SFML}\\[0.7ex]
+        une force de plus = \textbf{une classe} (le vent)\\[0.7ex]
+        énergie : moins de 1\,\% d'écart sur le pendule\\[0.7ex]
+        \code{-Wall -Wextra -Werror} : \textbf{zéro avertissement}\\[0.7ex]
+        test sans affichage : 13 scènes $\times$ 2 intégrateurs}};
+    \node[cls=ctrlred/ctrlfill,text width=6.3cm,align=left,minimum height=4.6cm,anchor=north] (ko) at (11.1,5.0)
+      {{\bfseries\small\color{ctrlred}\faExclamationTriangle\enspace Limites connues}\\[1.2ex]
+       {\scriptsize
+        pas de collision \textbf{entre} particules, seulement avec les bords\\[0.7ex]
+        un ressort est calculé \textbf{deux fois}, une par extrémité\\[0.7ex]
+        Verlet : vitesse estimée par différence arrière\\[0.7ex]
+        forces attachées aux particules, pas au \code{World}\\[0.7ex]
+        pas de rendu SVG ni de \code{namespace}}};
+  \end{tikzpicture}
+  \astcue{
+    \cue{insister sur l'\cuekey{extensibilité} : vent ajouté sans toucher au moteur}
+    \cue{limites : les dire nous-mêmes avant qu'on nous les demande}
+    \cuenext{questions, puis démo}
+  }
+\end{frame}
+
+% ============================================================ fin
+\begin{frame}[plain]
+  \centering
+  \vspace*{\fill}
+  \ressortsemblem[1.3]\par\vspace{6mm}
+  {\LARGE\bfseries\color{inpnavy}Merci}\par\vspace{2mm}
+  {\color{phelmared}\rule{2.6cm}{1.2pt}}\par\vspace{3mm}
+  {\normalsize\color{textgrey}Questions \astsep{} démo}\par\vspace{5mm}
+  {\scriptsize\color{textgrey}\code{github.com/Audr1c/POOProject}\astsep branche \code{presentation}}
+  \vspace*{\fill}
+  \astcue{
+    \cue{lancer \code{./poop} : tissu, \cuekey{I} pour changer d'intégrateur, rideau au vent}
+    \cue{attraper, lancer, épingler (clic droit) une particule}
+  }
+\end{frame}

@@ -69,3 +69,8 @@ target_link_libraries(sfml PRIVATE sfml-graphics)
 add_executable(capture ./app/capture.cpp)
 target_compile_options(capture PRIVATE -Wall -Wextra -Werror)
 target_link_libraries(capture PRIVATE scenes physics render sfml-graphics)
+
+# Energie totale d'une scene, Euler contre Verlet (CSV pour la presentation)
+add_executable(energie ./app/energie.cpp)
+target_compile_options(energie PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(energie PRIVATE scenes physics)

@@ -25,4 +25,7 @@ public:
 
   float getRestLength() const;
   float getLength() const;
+  float getStiffness() const;
+  // Elastic potential energy: 1/2 k (L - L0)^2
+  float energy() const;
 };

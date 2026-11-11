@@ -33,6 +33,13 @@ Vec2 Spring::compute(const Particle &particle) {
 
 float Spring::getRestLength() const { return L0; }
 
+float Spring::getStiffness() const { return k; }
+
+float Spring::energy() const {
+  const float stretch = getLength() - L0;
+  return 0.5f * k * stretch * stretch;
+}
+
 float Spring::getLength() const {
   return (ends[1]->getPos() - ends[0]->getPos()).norm();
 }
