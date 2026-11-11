@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <deque>
 #include <memory>
 #include <ostream>
 #include <stdexcept>
@@ -27,8 +28,9 @@ private:
   // deque: adding a particle never moves the others, so the springs (and the
   // mouse) can keep pointers to them
   ParticleList particles;
-  // unique_ptr: a Spring must never move (particles keep a reference to it)
-  std::vector<std::unique_ptr<Spring>> springs;
+  // deque too: a Spring must never move (particles keep a reference to it),
+  // and push_back/emplace_back on a deque never moves the existing elements
+  std::deque<Spring> springs;
   // Integrator algorithm which is used in the world
   std::unique_ptr<Integrator> integrator;
   Borders world_borders; // Saved as {x_min, x_max, y_min, y_max}

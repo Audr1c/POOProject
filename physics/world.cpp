@@ -32,8 +32,9 @@ Particle &World::addPart(const Particle &new_part) {
 
 Spring &World::addSpring(Particle &a, Particle &b, float L0, float k,
                          float rho) {
-  springs.push_back(std::make_unique<Spring>(a, b, L0, k, rho));
-  return *springs.back();
+  // built in place: the Spring registers itself on a and b, it must not be
+  // copied afterwards
+  return springs.emplace_back(a, b, L0, k, rho);
 }
 
 Spring &World::addSpring(Particle &a, Particle &b, float k, float rho) {
@@ -115,8 +116,8 @@ std::ostream &operator<<(std::ostream &os, const World &w) {
 void World::draw(Renderer &renderer) {
 
   // Draw springs
-  for (auto &s : springs) {
-    s->draw(renderer);
+  for (Spring &s : springs) {
+    s.draw(renderer);
   }
 
   // Draw particles
@@ -130,8 +131,8 @@ std::vector<Entity *> World::entities() {
   all.reserve(particles.size() + springs.size());
   for (Particle &p : particles)
     all.push_back(&p); // upcast to the single shared Entity sub-object
-  for (auto &s : springs)
-    all.push_back(s.get());
+  for (Spring &s : springs)
+    all.push_back(&s);
   return all;
 }
 
