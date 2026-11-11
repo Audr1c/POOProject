@@ -1,1 +1,15 @@
 /build/
+# compilation faite hors de build/ (editeur) : on n'archive pas ces fichiers
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+*.synctex(busy)
+/main.pdf
+/main-fiche.pdf
