@@ -8,7 +8,9 @@
 \setlength{\astdiagheight}{\dimexpr\paperheight-\astheadheight-\astfootheight-0.7cm\relax}
 
 % Separateur entre mots-cles :  surface \astsep fuite
-\newcommand{\astsep}{\;\textperiodcentered\;}
+% \texorpdfstring : dans les metadonnees du PDF (\author -> pdfauthor), une
+% simple virgule, sinon hyperref avertit << Token not allowed in a PDF string >>
+\newcommand{\astsep}{\texorpdfstring{\;\textperiodcentered\;}{, }}
 
 % ---------------------------------------------------------------------------
 % diagramoverlay : on dessine sur une image en coordonnees relatives,
