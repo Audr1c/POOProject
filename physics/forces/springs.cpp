@@ -48,9 +48,9 @@ void Spring::draw(Renderer &renderer) {
   if (!visible)
     return;
 
-  // strain in [-1, 1]: 25 % of stretch gives the full tint
+  // strain in [-1, 1]: 12.5 % of stretch gives the full tint
   // (rouge Phelma en traction, bleu en compression)
-  float strain = L0 > 0.f ? (getLength() - L0) / L0 * 4.f : 0.f;
+  float strain = L0 > 0.f ? (getLength() - L0) / L0 * 8.f : 0.f;
   strain = std::clamp(strain, -1.f, 1.f);
 
   const Color target = strain > 0.f ? Color(189, 29, 29) : Color(51, 108, 230);
