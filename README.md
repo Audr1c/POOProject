@@ -57,6 +57,8 @@ cd POOProject
 Installing dependancies:
 ```sh
 apt-get install libudev-dev #SFML Rendering
+sudo apt install libgl-dev libopengl-dev libxrandr-dev libxcursor-dev libfreetype-dev
+
 ```
 
 
