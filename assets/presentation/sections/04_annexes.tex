@@ -1,0 +1,46 @@
+% !TEX root = ../main.tex
+% Annexes : diapositives de reserve, montrees seulement si on nous le demande.
+
+\appendix
+
+% ============================================================ A1. energie
+% [fragile] + \shorthandoff : pgfplots lit les << ; >> que babel-french rend actifs
+\begin{frame}[fragile]{Annexe : Euler ou Verlet, l'énergie}
+  \framesubtitle{sans frottement, l'énergie totale doit rester constante}
+  \centering\shorthandoff{;:}%
+  \begin{tikzpicture}
+    \begin{axis}[astplot,name=a1,title={Pendule},xlabel={$t$ (s)},ylabel={écart (\%)},
+        xmin=0,xmax=10,ymin=-1.2,ymax=1.2,height=3.2cm,
+        legend pos=south west]
+      \addplot[timaorange] table[x=t,y expr={(\thisrow{euler}/58.86-1)*100},col sep=comma]
+        {figures/data/energie_pendule.csv};
+      \addplot[astblue,dash pattern=on 3pt off 1.5pt] table[x=t,y expr={(\thisrow{verlet}/58.86-1)*100},col sep=comma]
+        {figures/data/energie_pendule.csv};
+      \legend{Euler,Verlet}
+    \end{axis}
+    \begin{axis}[astplot,at={(a1.east)},anchor=west,xshift=1.4cm,title={Double pendule (chaotique)},
+        xlabel={$t$ (s)},xmin=0,xmax=10,ymin=-4,ymax=4,height=3.2cm]
+      \addplot[timaorange] table[x=t,y expr={(\thisrow{euler}/100.847-1)*100},col sep=comma]
+        {figures/data/energie_double_pendule.csv};
+      \addplot[astblue,dash pattern=on 3pt off 1.5pt] table[x=t,y expr={(\thisrow{verlet}/100.847-1)*100},col sep=comma]
+        {figures/data/energie_double_pendule.csv};
+    \end{axis}
+  \end{tikzpicture}
+  \par\vspace{1mm}
+  \begin{tikzpicture}
+    \node[cls=memborder/memfill,font=\scriptsize,align=left,text width=12.8cm] {%
+      \textbf{On compare} l'énergie totale $E(t) = \sum \tfrac12 mv^2 + \sum mgh + \sum \tfrac12 k(\ell-L_0)^2$
+      à sa valeur de départ $E(0)$ \astsep{} écart $= E(t)/E(0) - 1$\\[0.4ex]
+      \textbf{D'où vient la perte ?} Sans frottement ni amortissement, la vraie physique garde $E$ constante :
+      l'écart vient seulement du \textbf{calcul pas à pas} ($dt = 1/120$\,s n'est pas infiniment petit)\\[0.4ex]
+      \textbf{Résultat} : l'écart oscille mais \textbf{ne dérive pas} (pendule : 0,7\,\%, critère du sujet : 5\,\%) ;
+      le double pendule est chaotique, avec des ressorts très raides : erreur plus grande mais bornée};
+  \end{tikzpicture}
+  \astcue{
+    \cue{mesuré par le programme \code{energie} : $\frac12 mv^2 + mgh + \frac12 k(\ell-L_0)^2$}
+    \cue{les deux courbes se superposent : \cuekey{pas de dérive}}
+    \cuewarn{on attendait Euler moins bon : c'est vrai pour l'Euler \emph{explicite}, pas le semi-implicite}
+    \cuenext{retour aux questions}
+  }
+\end{frame}
+

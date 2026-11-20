@@ -4,13 +4,13 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="key" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=2.7;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:24px&quot;&gt;I&lt;/span&gt;&lt;/b&gt;" vertex="1">
-          <mxGeometry height="60.7" width="60.7" x="7.6" y="166.9" as="geometry" />
+        <mxCell id="key" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=2.7;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;touche&lt;/span&gt;&lt;br&gt;&lt;b&gt;&lt;span style=&quot;font-size:27px&quot;&gt;I&lt;/span&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="72" width="60.7" x="7.6" y="161" as="geometry" />
         </mxCell>
         <mxCell id="en" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;enum class IntegratorType&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;Euler&lt;/span&gt;, &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;Verlet&lt;/span&gt;&lt;/span&gt;" vertex="1">
           <mxGeometry height="60.7" width="290.5" x="105.1" y="166.9" as="geometry" />
         </mxCell>
-        <mxCell id="mk" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;makeIntegrator(type)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#BD1D1D&quot;&gt;le seul &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;switch&lt;/span&gt; du projet&lt;/span&gt;" vertex="1">
+        <mxCell id="mk" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;makeIntegrator(type)&lt;/span&gt;" vertex="1">
           <mxGeometry height="60.7" width="237" x="438" y="166.9" as="geometry" />
         </mxCell>
         <mxCell id="set" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;world.setIntegrator(...)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;reçoit un &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;unique_ptr&amp;lt;Integrator&amp;gt;&lt;/span&gt;&lt;/span&gt;" vertex="1">
@@ -25,7 +25,7 @@
         <mxCell id="x3" edge="1" parent="1" source="mk" style="edgeStyle=none;html=1;rounded=0;strokeColor=#2A2E47;strokeWidth=2.7;endArrow=classic;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="set">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="call" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;integrator-&amp;gt;step(particles, dt)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;World&lt;/span&gt; ignore le type réel&lt;/span&gt;" vertex="1">
+        <mxCell id="call" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;integrator-&amp;gt;step(particles, dt)&lt;/span&gt;" vertex="1">
           <mxGeometry height="60.7" width="354.8" x="50.2" y="375.6" as="geometry" />
         </mxCell>
         <mxCell id="x4" edge="1" parent="1" source="set" style="edgeStyle=none;html=1;rounded=0;strokeColor=#23445D;strokeWidth=1.9;dashed=1;dashPattern=4 3;endArrow=classic;endFill=1;endSize=7;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="call">
@@ -42,7 +42,7 @@
         <mxCell id="x5" edge="1" parent="1" source="call" style="edgeStyle=none;html=1;rounded=0;strokeColor=#2A2E47;strokeWidth=2.7;endArrow=classic;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="I">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="eu" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:24px&quot;&gt;Euler semi-implicite&lt;/span&gt;&lt;/b&gt;&lt;br&gt;\(\vec v \mathrel{+}= \vec a\,dt \quad \vec x \mathrel{+}= \vec v\,dt\)" vertex="1">
+        <mxCell id="eu" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:24px&quot;&gt;Euler&lt;/span&gt;&lt;/b&gt;&lt;br&gt;\(\vec v \mathrel{+}= \vec a\,dt \quad \vec x \mathrel{+}= \vec v\,dt\)" vertex="1">
           <mxGeometry height="72.1" width="280.7" x="719.7" y="303.5" as="geometry" />
         </mxCell>
         <mxCell id="ve" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:24px&quot;&gt;Verlet&lt;/span&gt;&lt;/b&gt;&lt;br&gt;\(\vec x_{n+1} = 2\vec x_n - \vec x_{n-1} + \vec a\,dt^2\)" vertex="1">
@@ -61,9 +61,6 @@
               <mxPoint x="614.53" y="470" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="x8" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontColor=#5F6368;spacing=0;" value="les deux tiennent &lt;span style=&quot;font-family:Fira Mono,Consolas,monospace;font-size:85%&quot;&gt;previous_pos&lt;/span&gt; à jour :&lt;br&gt;on bascule sans saut" vertex="1">
-          <mxGeometry height="51.3" width="185.1" x="461.29999999999995" y="458.7" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

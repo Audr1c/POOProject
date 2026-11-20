@@ -245,13 +245,15 @@ void buildCloth(SceneInstance &s) {
   linkGrid(s, g, o);
 }
 
-void buildBlob(SceneInstance &s) {
+void buildBikeWheel(SceneInstance &s) {
   s.drag.setCoefficient(0.01f);
-  Ring b = makeBlob(s, {3.f, 5.5f}, 1.f, 20, 0.1f, 0.5f, 0.7f, kPink, 600.f,
-                    250.f, 300.f, 0.4f);
-  std::vector<Particle *> all = b.rim;
-  all.push_back(b.center);
-  launch(all, {4.f, 0.f});
+  // Rim of 24 particles, spokes to the hub; dropped while rolling forward
+  Ring w = makeBlob(s, {3.f, 5.5f}, 1.f, 24, 0.1f, 0.5f, 0.6f, kAnchor, 500.f,
+                    150.f, 250.f, 0.4f);
+  w.center->setFillColor(kAnchor);
+  std::vector<Particle *> all = w.rim;
+  all.push_back(w.center);
+  launch(all, {3.f, -4.f});
 }
 
 void buildWindyCurtain(SceneInstance &s) {
@@ -271,7 +273,8 @@ void buildWindyCurtain(SceneInstance &s) {
   GridSprings o;
   o.k_struct = 250.f;
   o.k_shear = 120.f;
-  o.rho = 0.05f;
+  o.rho = 0.15f;
+  o.k_bend = 80.f; // stops the strong gusts from folding it over the rod
   o.color = kViolet;
   o.show_shear = false;
   linkGrid(s, g, o);
@@ -279,11 +282,11 @@ void buildWindyCurtain(SceneInstance &s) {
   // Gusty wind from the left: a lambda of time (J4 extension)
   Wind &wind = s.addForce<Wind>(
       [](float t) {
-        const float gust = 6.f + 5.f * std::sin(0.7f * t) +
-                           2.f * std::sin(2.3f * t + 1.f);
+        const float gust = 11.f + 8.f * std::sin(0.7f * t) +
+                           3.f * std::sin(2.3f * t + 1.f);
         return Vec2(gust, 0.8f * std::sin(1.3f * t));
       },
-      s.time, 0.035f);
+      s.time, 0.08f);
   for (Particle *p : g.cells)
     p->addForce(wind);
 }
@@ -443,8 +446,8 @@ const std::vector<Scene> &allScenes() {
        {12.f, 8.f}, buildBridge},
       {"Tissu", "grille 20 x 20 epinglee par ses deux coins du haut",
        {12.f, 9.f}, buildCloth},
-      {"Blob", "anneau de 20 particules + centre, lance vers la droite",
-       {12.f, 8.f}, buildBlob},
+      {"Roue de velo", "jante de 24 particules + rayons, lancee vers le sol",
+       {12.f, 8.f}, buildBikeWheel},
       {"Rideau au vent", "extension J4 : vent variable donne par une lambda",
        {14.f, 9.f}, buildWindyCurtain},
       {"Gelee", "carre mou 8 x 8 (structure + cisaillement + flexion)",

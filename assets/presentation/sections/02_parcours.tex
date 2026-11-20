@@ -7,12 +7,13 @@
 
 % ============================================================ la carte
 \begin{frame}{Le parcours d'un pas}
-  \framesubtitle{huit étapes, de la scène à la souris}
+  \framesubtitle{sept étapes, de la scène au dessin}
   \centering
   \schema{parcours}
   \astcue{
     \cue{la \cuekey{carte} de toute la partie : on la suit étape par étape}
     \cue{1 à 3 : une seule fois \astsep{} 4 à 6 : deux fois par image \astsep{} 7 : une fois par image}
+    \cue{boucle à pas fixe : on rattrape le temps réel écoulé, \cuekey{pas de 1/120\,s} quoi qu'il arrive}
     \cue{pas fixe : \cuekey{Verlet suppose un dt constant}}
     \cuenext{étape 1 : d'où vient une scène}
   }
@@ -88,8 +89,14 @@
       $\vec F_A = \big[\,\textcolor{astblue}{k\,(\lVert\vec d\rVert - L_0)}
         + \textcolor{timaorange}{\rho\,(\vec v_B-\vec v_A)\cdot\hat d}\,\big]\,
         \textcolor{phelmared}{\hat d}$}
-      \par\vspace{3mm}
-\begin{lstlisting}[escapeinside={(*@}{@*)},basicstyle=\ttfamily\tiny]
+      \par\vspace{1.5mm}
+      {\scriptsize
+        \textcolor{astblue}{\rule{2mm}{2mm}}\,\textbf{élastique} (Hooke)\enspace
+        \textcolor{timaorange}{\rule{2mm}{2mm}}\,\textbf{frottement interne}\enspace
+        \textcolor{phelmared}{\rule{2mm}{2mm}}\,\textbf{direction}}
+      \par\vspace{2mm}
+      \raggedright\hspace*{2mm}\filetab{physics/forces/springs.cpp}\par\nointerlineskip
+\begin{lstlisting}[aboveskip=0pt,escapeinside={(*@}{@*)},basicstyle=\ttfamily\tiny]
 const Vec2 d = ends[1]->getPos() - ends[0]->getPos();
 const float length = d.norm();
 const Vec2 (*@\textcolor{phelmared}{direction = d / length}@*);
@@ -97,7 +104,6 @@ const float (*@\textcolor{timaorange}{speed = (ends[1]->getSpeed() - ends[0]->ge
                     (*@\textcolor{timaorange}{.dot(direction)}@*);
 return direction * ((*@\textcolor{astblue}{k * (length - L0)}@*) + (*@\textcolor{timaorange}{rho * speed}@*));
 \end{lstlisting}
-      \hfill\filechip{physics/forces/springs.cpp, abrégé}
     \end{column}
     \begin{column}{0.31\textwidth}
       \begin{tikzpicture}[x=1cm,y=1cm]
@@ -122,124 +128,69 @@ return direction * ((*@\textcolor{astblue}{k * (length - L0)}@*) + (*@\textcolor
 
 % ============================================================ 5. integration
 \begin{frame}{Changer d'intégrateur en direct}
-  \framesubtitle{\code{enum class}, une fabrique et une interface}
+  \framesubtitle{\code{enum class} et une interface commune}
   \centering
   \schema[5.3cm]{integration}
   \fil{5}
   \astcue{
     \cue{\code{enum class} : un type à part, pas un \code{int} déguisé}
-    \cue{toute la décision est dans la \cuekey{fabrique}, hors de \code{World}}
+    \cue{\code{makeIntegrator} crée le bon objet : \code{World} ne voit que l'interface}
     \cue{démo : appuyer sur \cuekey{I} pendant le tissu}
-    \cuenext{lequel est le meilleur ? on a mesuré l'énergie}
-  }
-\end{frame}
-
-% ============================================================ 5b. energie
-% [fragile] + \shorthandoff : pgfplots lit les << ; >> que babel-french rend actifs
-\begin{frame}[fragile]{Euler ou Verlet : l'énergie}
-  \framesubtitle{écart à l'énergie initiale, 10\,s, sans amortissement}
-  \centering\shorthandoff{;:}%
-  \begin{tikzpicture}
-    \begin{axis}[astplot,name=a1,title={Pendule},xlabel={$t$ (s)},ylabel={écart (\%)},
-        xmin=0,xmax=10,ymin=-1.2,ymax=1.2,
-        legend pos=south west]
-      \addplot[timaorange] table[x=t,y expr={(\thisrow{euler}/58.86-1)*100},col sep=comma]
-        {figures/data/energie_pendule.csv};
-      \addplot[astblue,dash pattern=on 3pt off 1.5pt] table[x=t,y expr={(\thisrow{verlet}/58.86-1)*100},col sep=comma]
-        {figures/data/energie_pendule.csv};
-      \legend{Euler,Verlet}
-    \end{axis}
-    \begin{axis}[astplot,at={(a1.east)},anchor=west,xshift=1.4cm,title={Double pendule (chaotique)},
-        xlabel={$t$ (s)},xmin=0,xmax=10,ymin=-4,ymax=4]
-      \addplot[timaorange] table[x=t,y expr={(\thisrow{euler}/100.847-1)*100},col sep=comma]
-        {figures/data/energie_double_pendule.csv};
-      \addplot[astblue,dash pattern=on 3pt off 1.5pt] table[x=t,y expr={(\thisrow{verlet}/100.847-1)*100},col sep=comma]
-        {figures/data/energie_double_pendule.csv};
-    \end{axis}
-  \end{tikzpicture}
-  \par\vspace{1mm}
-  \begin{tikzpicture}
-    \node[cls=datagreen/datafill,font=\scriptsize,align=center]
-      {critère du sujet tenu : \textbf{moins de 5\,\%} sur 10\,s avec Verlet (pendule : 0,7\,\%)\\[0.2ex]
-       {\tiny\color{textgrey}Euler \emph{semi-implicite} conserve aussi bien l'énergie : les deux schémas sont symplectiques}};
-  \end{tikzpicture}
-  \fil{5}
-  \astcue{
-    \cue{mesuré par le programme \code{energie} : $\frac12 mv^2 + mgh + \frac12 k(\ell-L_0)^2$}
-    \cue{les deux courbes se superposent : \cuekey{pas de dérive}}
-    \cuewarn{on attendait Euler moins bon : c'est vrai pour l'Euler \emph{explicite}, pas le semi-implicite}
+    \cue{comparaison de l'énergie des deux schémas : en \cuekey{annexe}}
     \cuenext{après l'intégration : on remet les particules dans la boîte}
   }
 \end{frame}
 
 % ============================================================ 6. contraintes
 \begin{frame}{Les contraintes}
-  \framesubtitle{bords du monde, rebond et points épinglés}
+  \framesubtitle{les bords du monde et le rebond}
   \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.70\textwidth}
-      \centering\schema[5.3cm]{contraintes}
+    \begin{column}{0.48\textwidth}
+      \centering\schema[5.1cm]{contraintes}
     \end{column}
-    \begin{column}{0.28\textwidth}
-      \centering\scenecard{figures/scenes/scene_10.png}{Pluie de balles}{2.2cm}
+    \begin{column}{0.50\textwidth}
+      \centering\scenecard{figures/scenes/scene_10.png}{Pluie de balles}{3.6cm}
     \end{column}
   \end{columns}
   \fil{6}
   \astcue{
     \cue{le monde est une \cuekey{boîte} : 4 bords au lieu d'un simple sol}
-    \cue{coefficient de restitution $e$ : chaque balle a le sien}
+    \cue{coefficient de rebond $b$ (\code{bounciness}) : chaque balle a le sien}
     \cue{Verlet déduit la vitesse des positions : il faut corriger son historique}
     \cuenext{le pas est fini, on dessine}
   }
 \end{frame}
 
-% ============================================================ 7. dessin / diamant
-\begin{frame}{Dessiner : le diamant}
-  \framesubtitle{\code{Spring} est une \code{Force} et un \code{Drawable}}
+% ============================================================ 7. diamant
+\begin{frame}{L'héritage en diamant}
+  \framesubtitle{\code{Spring} est à la fois une \code{Force} et un \code{Drawable}}
   \centering
   \schema[5.3cm]{diamant}
   \fil{7}
   \astcue{
+    \cue{un ressort \cuekey{agit} sur les particules et se \cuekey{dessine} : deux parents}
     \cue{\code{Force} et \code{Drawable} héritent \cuekey{virtuellement} d'\code{Entity}}
     \cue{mesure \code{sizeof} : 112 contre 144 octets, et un seul id}
-    \cue{le moteur appelle \code{Renderer} : SFML reste une \cuekey{boîte noire}}
-    \cuenext{dernière étape : l'utilisateur attrape une particule}
+    \cuenext{ce que fait la partie \code{Drawable} : le dessin}
   }
 \end{frame}
 
-% ============================================================ 8. souris
-\begin{frame}[fragile]{Attraper une particule à la souris}
-  \framesubtitle{une lambda et un \code{dynamic\_cast}}
+% ============================================================ 7b. dessin
+\begin{frame}{Dessiner}
+  \framesubtitle{le moteur ne connaît que l'interface \code{Renderer}}
   \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-Particle *World::pickParticle(const Vec2 &at,
-                              float max_dist) {
-  Particle *best = nullptr;
-  float best_dist = max_dist;
-  // la lambda capture best et best_dist
-  auto closer = [&](Entity *e) {
-    if (Particle *p = dynamic_cast<Particle *>(e)) {
-      const float d = (p->getPos() - at).norm();
-      if (d < best_dist) { best_dist = d; best = p; }
-    }
-  };
-  std::vector<Entity *> all = entities();
-  std::for_each(all.begin(), all.end(), closer);
-  return best;
-}
-\end{lstlisting}
-      \hfill\filechip{physics/world.cpp}
+    \begin{column}{0.50\textwidth}
+      \centering\schema[5.1cm]{dessin}
     \end{column}
-    \begin{column}{0.40\textwidth}
-      \centering
-      \schema{souris}
+    \begin{column}{0.46\textwidth}
+      \centering\scenecard{figures/scenes/scene_05.png}{Tissu : rouge étiré, bleu comprimé}{3.6cm}
     \end{column}
   \end{columns}
-  \fil{8}
+  \fil{7}
   \astcue{
-    \cue{\code{dynamic\_cast} renvoie \code{nullptr} pour un ressort}
-    \cue{la lambda capture par référence : \cuekey{[\&]}}
-    \cue{relâcher = lancer : la vitesse de la souris est rendue à la particule}
+    \cue{\code{World::draw} parcourt les \code{Drawable} : appel virtuel, comme pour les forces}
+    \cue{la couleur d'un ressort dit son état : \cuekey{rouge} étiré, \cuekey{bleu} comprimé}
+    \cue{le moteur appelle \code{Renderer} : SFML reste une \cuekey{boîte noire}}
     \cuenext{ce que tout ça donne : les scènes}
   }
 \end{frame}

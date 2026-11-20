@@ -16,18 +16,18 @@
       \centering\shorthandoff{;:}%
       \begin{tikzpicture}
         \begin{axis}[astplot,width=7.4cm,height=3.2cm,xlabel={$t$ (s)},ylabel={$w_x$ (m/s)},
-            xmin=0,xmax=20,ymin=-2,ymax=14,ytick={0,6,12},samples=300,domain=0:20]
-          \addplot[violet!70!black,fill=sinkfill,fill opacity=0.5] {6+5*sin(deg(0.7*x))+2*sin(deg(2.3*x+1))} \closedcycle;
-          \addplot[sinkpurple,line width=1.2pt] {6+5*sin(deg(0.7*x))+2*sin(deg(2.3*x+1))};
+            xmin=0,xmax=20,ymin=-1,ymax=24,ytick={0,11,22},samples=300,domain=0:20]
+          \addplot[violet!70!black,fill=sinkfill,fill opacity=0.5] {11+8*sin(deg(0.7*x))+3*sin(deg(2.3*x+1))} \closedcycle;
+          \addplot[sinkpurple,line width=1.2pt] {11+8*sin(deg(0.7*x))+3*sin(deg(2.3*x+1))};
         \end{axis}
       \end{tikzpicture}
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
 Wind &wind = s.addForce<Wind>(
     [](float t) {   // rafales : deux sinus
-      float gust = 6 + 5*sin(0.7f*t) + 2*sin(2.3f*t + 1);
+      float gust = 11 + 8*sin(0.7f*t) + 3*sin(2.3f*t + 1);
       return Vec2(gust, 0.8f * sin(1.3f*t));
     },
-    s.time, 0.035f);           // F = c (w(t) - v)
+    s.time, 0.08f);            // F = c (w(t) - v)
 \end{lstlisting}
     \end{column}
   \end{columns}
@@ -54,13 +54,14 @@ Wind &wind = s.addForce<Wind>(
     \scenecard{figures/scenes/scene_04.png}{Pont de corde}{2.6cm} &
     \scenecard{figures/scenes/scene_12.png}{Toile d'araignée}{2.6cm} &
     \scenecard{figures/scenes/scene_09.png}{Oscillateurs}{2.6cm} \\[3mm]
-    \scenecard{figures/scenes/scene_06.png}{Blob}{2.6cm} &
+    \scenecard{figures/scenes/scene_06.png}{Roue de vélo}{2.6cm} &
     \scenecard{figures/scenes/scene_08.png}{Gelée}{2.6cm} &
     \scenecard{figures/scenes/scene_11.png}{Apesanteur}{2.6cm} \\
   \end{tabular}
   \astcue{
     \cue{ajouter une scène = écrire une fonction, \cuekey{sans toucher au moteur}}
     \cue{oscillateurs : 6 raideurs, de 5 à 160 N/m, même masse}
+    \cue{roue de vélo : en gris sa position de départ, on voit l'\cuekey{écrasement} au sol}
     \cue{apesanteur : $g = 0$, un anneau qui tourne sur lui-même}
     \cuenext{démo en direct si le temps le permet}
   }
@@ -81,25 +82,23 @@ Wind &wind = s.addForce<Wind>(
 \begin{frame}{Bilan}
   \framesubtitle{ce que le moteur fait, et ses limites}
   \centering
+  \newcommand{\okb}{\hangindent=0.9em\hangafter=1\makebox[0.9em][l]{\color{datagreen!50!black}\textbullet}}%
+  \newcommand{\kob}{\hangindent=0.9em\hangafter=1\makebox[0.9em][l]{\color{ctrlred}\textbullet}}%
   \begin{tikzpicture}[x=1cm,y=1cm]
     \node[cls=datagreen/datafill,text width=6.3cm,align=left,minimum height=4.6cm,anchor=north] (ok) at (3.5,5.0)
       {{\bfseries\small\color{datagreen!50!black}\faCheck\enspace Ce qui marche}\\[1.2ex]
        {\scriptsize
-        \textbf{13 scènes}, du pendule au tissu de 400 particules\\[0.7ex]
-        Euler ou Verlet, \textbf{changés en direct}\\[0.7ex]
-        \code{physics} compilée en \code{.a}, \textbf{sans SFML}\\[0.7ex]
-        une force de plus = \textbf{une classe} (le vent)\\[0.7ex]
-        énergie : moins de 1\,\% d'écart sur le pendule\\[0.7ex]
-        \code{-Wall -Wextra -Werror} : \textbf{zéro avertissement}\\[0.7ex]
-        test sans affichage : 13 scènes $\times$ 2 intégrateurs}};
+        \okb modèle \textbf{masses-ressorts} qui fonctionne : \textbf{13 scènes}\\[0.7ex]
+        \okb physiquement juste : \textbf{l'énergie est conservée}\\[0.7ex]
+        \okb une \textbf{hiérarchie de classes} propre\\[0.7ex]
+        \okb Euler ou Verlet, \textbf{changés en direct}\\[0.7ex]
+        \okb Extensible : une force de plus = \textbf{une classe} (ex: le vent)}};
     \node[cls=ctrlred/ctrlfill,text width=6.3cm,align=left,minimum height=4.6cm,anchor=north] (ko) at (11.1,5.0)
       {{\bfseries\small\color{ctrlred}\faExclamationTriangle\enspace Limites connues}\\[1.2ex]
        {\scriptsize
-        pas de collision \textbf{entre} particules, seulement avec les bords\\[0.7ex]
-        un ressort est calculé \textbf{deux fois}, une par extrémité\\[0.7ex]
-        Verlet : vitesse estimée par différence arrière\\[0.7ex]
-        forces attachées aux particules, pas au \code{World}\\[0.7ex]
-        pas de rendu SVG ni de \code{namespace}}};
+        \kob pas de collision \textbf{entre} particules, seulement avec les bords\\[0.7ex]
+        \kob un ressort est calculé \textbf{deux fois}, une par extrémité\\[0.7ex]
+        \kob forces attachées aux particules, pas au \code{World}}};
   \end{tikzpicture}
   \astcue{
     \cue{insister sur l'\cuekey{extensibilité} : vent ajouté sans toucher au moteur}
@@ -120,6 +119,7 @@ Wind &wind = s.addForce<Wind>(
   \vspace*{\fill}
   \astcue{
     \cue{lancer \code{./poop} : tissu, \cuekey{I} pour changer d'intégrateur, rideau au vent}
+    \cue{en réserve : l'annexe sur l'énergie (Euler contre Verlet)}
     \cue{attraper, lancer, épingler (clic droit) une particule}
   }
 \end{frame}

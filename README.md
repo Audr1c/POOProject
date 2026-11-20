@@ -15,7 +15,7 @@ les particules a la souris, on epingle, on change d'integrateur en direct.
   <tr>
     <td align="center"><img src="assets/presentation/figures/scenes/scene_02.png" alt="Double pendule"><br><sub>Double pendule</sub></td>
     <td align="center"><img src="assets/presentation/figures/scenes/scene_04.png" alt="Pont de corde"><br><sub>Pont de corde</sub></td>
-    <td align="center"><img src="assets/presentation/figures/scenes/scene_06.png" alt="Blob"><br><sub>Blob</sub></td>
+    <td align="center"><img src="assets/presentation/figures/scenes/scene_06.png" alt="Roue de vélo"><br><sub>Roue de vélo</sub></td>
   </tr>
   <tr>
     <td align="center"><img src="assets/presentation/figures/scenes/scene_07.png" alt="Rideau au vent"><br><sub>Rideau au vent</sub></td>
@@ -89,7 +89,7 @@ make poop # ninja poop
 | clic droit | epingler / liberer une particule |
 | `Echap` | quitter |
 
-Scenes : pendule, double pendule, corde, pont de corde, tissu 20 x 20, blob,
+Scenes : pendule, double pendule, corde, pont de corde, tissu 20 x 20, roue de velo,
 rideau au vent (extension J4 : vent variable donne par une lambda), gelee,
 oscillateurs, pluie de balles, apesanteur, toile d'araignee, tour en gelee.
 Les scenes sont dans `scenes/scenes.cpp` : une scene = un nom, une taille et
@@ -101,6 +101,27 @@ Test sans affichage (chaque scene 10 s avec les deux integrateurs) :
 cmake --build build --target scenes_test
 ./build/scenes_test
 ```
+
+## Qualite du code
+
+Toutes les cibles sont compilees avec `-Wall -Wextra -Werror` (zero
+avertissement). Controle des fuites memoire avec Valgrind sur le test sans
+affichage (13 scenes x 2 integrateurs, 10 s chacune) :
+```sh
+valgrind --leak-check=full --show-leak-kinds=all ./build/scenes_test
+```
+```
+==3== HEAP SUMMARY:
+==3==     in use at exit: 0 bytes in 0 blocks
+==3==   total heap usage: 52,867 allocs, 52,867 frees, 103,097,250 bytes allocated
+==3== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
+Aucune fuite, aucune erreur memoire.
+
+## Rapport
+
+Le rapport (LaTeX) est dans `assets/Rapport/` : `make` produit
+`build/rapport.pdf`. Il reprend les schemas et captures du diaporama.
 
 ## Presentation
 

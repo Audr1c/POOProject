@@ -6,6 +6,52 @@
   \titlepage
 \end{frame}
 
+% ============================================================= le sujet
+\begin{frame}{Le sujet}
+  \framesubtitle{un moteur physique 2D en C++, à concevoir de zéro}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.33\textwidth}
+      \begin{tikzpicture}
+        \node[cls=dummyorange/dummyfill,text width=0.9\linewidth,align=left,font=\scriptsize] {%
+          {\bfseries\small Objectif}\\[0.4ex]
+          \begin{itemize}\setlength{\itemsep}{0.6ex}\setlength{\leftmargini}{1em}
+            \item simuler en temps réel des \textbf{particules} reliées par des \textbf{ressorts}
+            \item \textbf{extensible} : une force, un intégrateur ou un affichage de plus
+              = une \textbf{classe} de plus, sans toucher au moteur
+            \item physique \textbf{indépendante} de l'affichage
+          \end{itemize}};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.64\textwidth}
+      \centering
+      {\small\bfseries\color{inpnavy} La physique d'un pas}\par\vspace{2mm}
+      \begin{tikzpicture}[x=1cm,y=1cm,font=\scriptsize,
+          blk/.style={minimum height=1.05cm,text width=2.05cm,align=center},
+          flow/.style={-{Latex[length=1.6mm]},inpnavy,line width=0.9pt}]
+        \node[cls=memborder/memfill,blk] (f) at (0,0) {\textbf{Forces}\\[0.3ex]{\tiny poids, ressorts, frottement}};
+        \node[cls=ctrlred/ctrlfill,blk] (n) at (2.75,0) {\textbf{Newton}\\[0.3ex]$\vec a = \sum \vec F / m$};
+        \node[cls=datagreen/datafill,blk] (i) at (5.5,0) {\textbf{Intégrateur}\\[0.3ex]{\tiny avance de $dt = 1/120$\,s}};
+        \draw[flow] (f) -- (n);
+        \draw[flow] (n) -- (i);
+        \draw[flow] (i.north) -- ++(0,0.45) -| node[pos=0.25,above,font=\tiny,text=textgrey] {nouvelles positions et vitesses} (f.north);
+        \node[cls=timaorange/white,align=left,anchor=north east,font=\tiny] (eu) at ($(i.south)+(-0.08,-0.45)$)
+          {{\bfseries\color{timaorange}Euler}\\$\vec v \mathrel{+}= \vec a\,dt$\\$\vec x \mathrel{+}= \vec v\,dt$};
+        \node[cls=astblue/white,align=left,anchor=north west,font=\tiny] (ve) at ($(i.south)+(0.08,-0.45)$)
+          {{\bfseries\color{astblue}Verlet}\\$\vec x_{n+1} = 2\vec x_n - \vec x_{n-1}$\\$\qquad + \vec a\,dt^2$};
+        \draw[datagreen,line width=0.8pt] (i.south) -- ++(0,-0.25) -| (eu.north);
+        \draw[datagreen,line width=0.8pt] (i.south) -- ++(0,-0.25) -| (ve.north);
+        \node[font=\tiny,text=textgrey,anchor=north east,align=right] at ($(eu.south west)+(-0.15,0.6)$)
+          {deux recettes :\\Euler suit la vitesse,\\Verlet la déduit\\des positions};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \astcue{
+    \cue{sujet \cuekey{personnalisé} : on pose le cadre avant de montrer le code}
+    \cue{intégrateur = la recette pour passer de l'accélération à la position suivante}
+    \cuenext{ce que fait notre moteur}
+  }
+\end{frame}
+
 % ============================================================= ce que fait le moteur
 \begin{frame}{Ce que fait le moteur}
   \framesubtitle{des particules, des ressorts, des forces}
@@ -14,7 +60,7 @@
       \begin{diagramoverlay}[width=\linewidth]{figures/scenes/scene_05.png}
         \astpoint{0.737}{0.94}{0.79}{0.80}{west}{ancre\\épinglée}
         \astpoint{0.722}{0.78}{0.79}{0.60}{west}{ressort\\étiré}
-        \astpoint{0.5}{0.32}{0.5}{0.10}{north}{400 particules\astsep 1\,482 ressorts}
+        \astpoint{0.5}{0.32}{0.5}{0.10}{north}{400 particules\astsep 1.4k ressorts}
       \end{diagramoverlay}
     \end{column}
     \begin{column}{0.38\textwidth}
@@ -22,7 +68,7 @@
       \vspace{1mm}
       \astbig[phelmared]{4}{forces : poids, frottement, ressort, vent}
       \vspace{1mm}
-      \astbig[timagreen]{1/120\,s}{pas fixe, Euler ou Verlet en direct}
+      \astbig[timagreen]{1/120\,s}{pas de temps fixe : 120 pas par seconde}
     \end{column}
   \end{columns}
   \astcue{

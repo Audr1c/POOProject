@@ -15,6 +15,30 @@
 #include <iostream>
 #include <string>
 
+namespace {
+
+// Renderer qui redessine tout en gris pale : sert a montrer la position de
+// depart d'une scene sous l'image finale (on voit mieux la deformation).
+class GhostRenderer : public Renderer {
+  Renderer &inner;
+  const Color ghost{215, 218, 222};
+
+public:
+  explicit GhostRenderer(Renderer &r) : inner(r) {}
+  void clear() override {}
+  void display() override {}
+  void drawCircle(const Vec2 &c, float r) override { inner.drawCircle(c, r, ghost); }
+  void drawLine(const Vec2 &a, const Vec2 &b) override { inner.drawLine(a, b, ghost); }
+  void drawCircle(const Vec2 &c, float r, const Color &) override {
+    inner.drawCircle(c, r, ghost);
+  }
+  void drawLine(const Vec2 &a, const Vec2 &b, const Color &) override {
+    inner.drawLine(a, b, ghost);
+  }
+};
+
+} // namespace
+
 int main(int argc, char **argv) {
   if (argc < 2) {
     std::cerr << "usage : capture <dossier> [largeur hauteur]\n";
@@ -25,8 +49,8 @@ int main(int argc, char **argv) {
   const unsigned h = argc > 3 ? static_cast<unsigned>(std::stoi(argv[3])) : 900;
 
   // Instant de la capture pour chaque scene (s), dans l'ordre de allScenes()
-  const float when[] = {0.55f, 2.2f, 1.6f, 3.f, 2.5f, 1.1f,
-                        3.5f,  0.9f, 0.6f, 1.2f, 1.5f, 3.f, 2.f};
+  const float when[] = {0.55f, 2.2f, 1.6f, 3.f, 2.5f, 0.7f,
+                        2.3f,  0.9f, 0.6f, 1.2f, 1.5f, 3.f, 2.f};
 
   SFMLRender rend;
   rend.create_window(w, h, "capture", 0);
@@ -46,6 +70,10 @@ int main(int argc, char **argv) {
 
     rend.clear();
     rend.drawWorldFrame();
+    if (scenes[i].name == "Roue de velo") { // position de depart en fantome
+      GhostRenderer ghost(rend);
+      instantiate(scenes[i], IntegratorType::Verlet)->world.draw(ghost);
+    }
     scene->world.draw(rend);
 
     sf::Texture tex;
