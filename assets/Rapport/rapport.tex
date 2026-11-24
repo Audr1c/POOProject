@@ -95,7 +95,9 @@
 \newcommand{\code}[1]{{\ttfamily\color{combislate}#1}}
 \newcommand{\schemafig}[3][\linewidth]{%
   \begin{figure}[htbp]\centering
-    \includegraphics[width=#1,height=0.33\textheight,keepaspectratio]{../presentation/figures/schemas/#2.pdf}
+    % schema propre au rapport (figures/) s'il existe, sinon celui du diaporama
+    \IfFileExists{figures/#2.pdf}{\def\schemadir{figures}}{\def\schemadir{../presentation/figures/schemas}}%
+    \includegraphics[width=#1,height=0.33\textheight,keepaspectratio]{\schemadir/#2.pdf}
     \caption{#3}\label{fig:#2}
   \end{figure}}
 % encadre de couleur
@@ -156,8 +158,7 @@ Il reste à avancer dans le temps : c'est le rôle de l'intégrateur, qui calcul
 la nouvelle position au bout d'un pas $dt = 1/120$\,s.
 
 Quatre forces sont modélisées. La première est le poids, $m\vec g$. La deuxième est le frottement de
-l'air, $-c\,\vec v$, opposé à la vitesse. La troisième est un vent qui varie dans le temps ; c'est
-l'extension que nous avons choisie. La dernière est le ressort amorti, qui agit entre deux particules
+l'air, $-c\,\vec v$, opposé à la vitesse. La troisième est un vent qui varie dans le temps. La dernière est le ressort amorti, qui agit entre deux particules
 A et B séparées du vecteur $\vec d$ :
 \[
   \vec F_A = \Big[\,\underbrace{k\,(\lVert\vec d\rVert - L_0)}_{\text{élastique}}
@@ -176,11 +177,11 @@ $\vec x_{n+1} = 2\vec x_n - \vec x_{n-1} + \vec a\,dt^2$.
 
 Enfin, les particules vivent dans une boîte. Lorsqu'une particule franchit un bord, elle est ramenée à
 l'intérieur et sa vitesse normale change de signe. Elle est en même temps multipliée par un
-coefficient de rebond $b$, compris entre 0 pour un bloc inerte et 1 pour une balle parfaite.
+coefficient de rebond $b$, compris entre 0 pour un bloc inerte et 1 pour un rebond parfait.
 
 Au-delà de la physique, l'enjeu du projet est l'architecture. Le moteur doit être extensible : une
 force, un intégrateur ou un affichage de plus doit s'écrire comme une classe de plus, sans retoucher
-le code existant. La physique doit aussi rester indépendante de l'affichage, assuré ici par SFML.
+le code existant. La physique doit aussi rester indépendante de l'affichage, assuré ici par la bibliothèque SFML.
 Le code compile avec les options \code{-Wall -Wextra -Werror}, sans le moindre avertissement, et ne
 doit laisser fuir aucune mémoire.
 
@@ -196,8 +197,8 @@ l'équipe, avant de conclure.
 Toutes les classes du moteur descendent d'une même racine, \code{Entity}, qui donne à chaque objet un
 nom et un identifiant unique. La figure~\ref{fig:hierarchie} montre la hiérarchie complète. Trois
 interfaces la structurent : \code{Force}, pour tout ce qui exerce une force sur une particule ;
-\code{Drawable}, pour tout ce qui se dessine ; \code{Integrator}, pour les méthodes d'avancée dans le
-temps. Les classes concrètes viennent se brancher sous ces interfaces.
+\code{Drawable}, pour tout ce qui se dessine ; \code{Integrator}, pour les méthodes d'actualisation
+des positions. Les classes concrètes viennent se brancher sous ces interfaces.
 
 \schemafig{hierarchie}{Hiérarchie des classes du moteur. L'héritage virtuel est en rouge, les classes abstraites en pointillé.}
 
@@ -255,8 +256,8 @@ void Particle::apply_force() {
 Ce choix rend le monde aveugle au type des forces. \code{World} ne contient aucun test pour savoir s'il
 manipule un ressort ou du vent. Un ressort, à sa création, s'inscrit lui-même dans la liste de ses deux
 extrémités. Ajouter une force revient donc à écrire une classe dérivée de \code{Force}, puis à
-l'attacher aux particules voulues. C'est ainsi que nous avons ajouté le vent, sans modifier une ligne
-du moteur.
+l'attacher aux particules voulues. C'est ainsi que nous avons pu ajouter après coup le vent, sans
+modifier une ligne du moteur.
 
 Les calculs eux-mêmes s'écrivent comme les formules, grâce à la surcharge des opérateurs de la classe
 \code{Vec2}. Additions, produits par un scalaire et produit scalaire s'y lisent directement. Les
@@ -438,7 +439,8 @@ interaction et en enregistre l'image : c'est lui qui a produit les illustrations
 \subsection{Le résultat}
 
 Le moteur anime treize scènes, du simple pendule au tissu de quatre cents particules. La
-figure~\ref{fig:scenes} en montre trois. Le rideau est soumis à notre extension : un vent dont la
+figure~\ref{fig:scenes} en montre trois. Le rideau est soumis à une force non prévue dans le cahier des
+charges initial : un vent dont la
 vitesse est donnée par une fonction du temps, écrite sous forme de lambda. La roue de vélo est
 dessinée par-dessus sa position de départ, en gris, ce qui fait voir son écrasement au contact du sol.
 
@@ -460,14 +462,15 @@ code, nous avons dessiné ensemble le diagramme de classes. Ces séances ont fix
 le calcul d'une force, le pas d'un intégrateur, le dessin d'un objet. Une fois ces contrats posés,
 chacun pouvait avancer de son côté sans attendre les autres.
 
-Nous avons ensuite découpé le diagramme en trois parts. Léo Dorval s'est chargé des forces et du
-ressort. Nicolas Marcel a écrit les intégrateurs et le monde. Audric Siguret a pris en charge
+Nous avons ensuite découpé le diagramme en trois parts. Léo s'est chargé des forces et du
+ressort. Nicolas a écrit les intégrateurs et le monde. Audric a pris en charge
 \code{Entity}, les particules et le rendu. Chacun travaillait sur sa propre branche Git, avant de
 fusionner son travail dans la branche principale du dépôt commun hébergé sur GitHub.
 
 La mise en commun s'est faite sans difficulté majeure, précisément parce que les interfaces avaient
 été décidées ensemble. Nous avons alors confié l'écriture des scènes de démonstration à l'assistant
-Claude. L'objectif du projet était le moteur physique ; les scènes n'en sont que des utilisatrices.
+Claude. L'objectif du projet était le moteur physique ; les scènes ne permettent que de montrer les
+capacités du moteur physique.
 Une dernière branche a enfin servi à préparer la soutenance et ce rapport.
 
 Côté outils, CMake gère la compilation et le téléchargement de SFML. Les schémas ont été dessinés
@@ -499,7 +502,7 @@ déroulement du projet, reconstitué à partir des dates des commits.
 
 Nous sommes contents du résultat : à la fin, nous avons un moteur qui marche. Le modèle masses-ressorts
 se comporte comme prévu, et il est physiquement juste, puisque l'énergie se conserve à moins de 1\,\%
-près sur le pendule. Les deux intégrateurs s'échangent en direct, et la hiérarchie de classes est restée
+près sur le pendule au bout de 5 oscillations. Les deux intégrateurs s'échangent en direct, et la hiérarchie de classes est restée
 propre du début à la fin. Le moteur a aussi ses limites. Les particules ne se heurtent pas entre elles,
 seulement contre les bords. Chaque ressort est calculé deux fois, une fois pour chacune de ses
 extrémités.
