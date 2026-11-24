@@ -7,7 +7,7 @@
         <mxCell id="phys" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=45;html=1;fillColor=#FBFBFC;strokeColor=#AAACAD;strokeWidth=2.1;dashed=1;dashPattern=6 4;" value="" vertex="1">
           <mxGeometry height="250.4" width="698" y="280.7" as="geometry" />
         </mxCell>
-        <mxCell id="phys_lab" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=1.6;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontStyle=1;fontColor=#23445D;" value="PHYSICS/ · LIBPHYSICS.A" vertex="1">
+        <mxCell id="phys_lab" parent="1" style="rounded=0;html=1;fillColor=#FFFFFF;strokeColor=#23445D;strokeWidth=1.6;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=16;fontStyle=1;fontColor=#23445D;" value="MOTEUR PHYSIQUE" vertex="1">
           <mxGeometry height="31.9" width="259.1" x="219.5" y="515.2" as="geometry" />
         </mxCell>
         <mxCell id="w" parent="1" style="rounded=1;absoluteArcSize=1;arcSize=24;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2.1;fontFamily=TeX Gyre Heros,Helvetica,Arial;fontSize=21;fontColor=#1A1A1A;align=center;verticalAlign=middle;spacingLeft=6;spacingRight=6;" value="&lt;b&gt;&lt;span style=&quot;font-size:27px&quot;&gt;World&lt;/span&gt;&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:16px;color:#5F6368&quot;&gt;possède tout&lt;/span&gt;" vertex="1">

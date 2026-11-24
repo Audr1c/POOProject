@@ -1,19 +1,7 @@
 % !TEX root = ../main.tex
-% Partie 1 : architecture (dossiers, hierarchie des classes)
+% Partie 1 : architecture (hierarchie des classes, dossiers)
 
 \section{Architecture}
-
-% ================================================================ architecture
-\begin{frame}{Quatre dossiers, une frontière}
-  \framesubtitle{le moteur ne connaît que l'interface \code{Renderer}}
-  \centering
-  \schema{architecture}
-  \astcue{
-    \cue{\cuekey{physics} compile en \code{.a}, sans SFML : vérifié avec \code{grep}}
-    \cue{le rendu SFML : on n'en parle pas, c'est une boîte noire}
-    \cuenext{ce qu'il y a dans physics}
-  }
-\end{frame}
 
 % ================================================================ hierarchie
 \begin{frame}{La hiérarchie des classes}
@@ -23,6 +11,18 @@
   \astcue{
     \cue{\cuekey{Spring} est à la fois une force et un dessin}
     \cue{sans \code{virtual} : deux \code{Entity}, deux identifiants}
+    \cuenext{où ces classes sont rangées : les dossiers}
+  }
+\end{frame}
+
+% ================================================================ architecture
+\begin{frame}{Quatre dossiers, une frontière}
+  \framesubtitle{le moteur ne connaît que l'interface \code{Renderer}}
+  \centering
+  \schema{architecture}
+  \astcue{
+    \cue{\cuekey{physics} compile en \code{.a}, sans SFML : vérifié avec \code{grep}}
+    \cue{le rendu SFML : on n'en parle pas, c'est une boîte noire}
     \cuenext{comment ces classes travaillent ensemble à chaque pas}
   }
 \end{frame}
